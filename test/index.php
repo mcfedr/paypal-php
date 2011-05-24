@@ -4,12 +4,6 @@
  * Host it somewhere that paypal can see it to test notifications
  * which will be logged in php's default log file
  * 
- * @author Fred Cox <mcfedr@gmail.com>
- * @copyright Copyright Fred Cox, 2011
- * @package paypal-php
- * @subpackage test
- * @license http://www.gnu.org/licenses/gpl.html GNU GENERAL PUBLIC LICENSE
- * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,6 +16,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * @author Fred Cox <mcfedr@gmail.com>
+ * @copyright Copyright Fred Cox, 2011
+ * @package paypal-php
+ * @subpackage test
+ * @license http://www.gnu.org/licenses/gpl.html GNU GENERAL PUBLIC LICENSE
  */
 require_once('../lib/libpaypal.php');
 

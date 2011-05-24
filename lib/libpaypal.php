@@ -3,12 +3,6 @@
  * For accessing the paypal api
  * See the test file for examples of usage
  * 
- * @author Fred Cox <mcfedr@gmail.com>
- * @copyright Copyright Fred Cox, 2011
- * @package paypal-php
- * @subpackage libpaypal
- * @license http://www.gnu.org/licenses/gpl.html GNU GENERAL PUBLIC LICENSE
- * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,6 +15,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * @author Fred Cox <mcfedr@gmail.com>
+ * @copyright Copyright Fred Cox, 2011
+ * @package paypal-php
+ * @subpackage libpaypal
+ * @license http://www.gnu.org/licenses/gpl.html GNU GENERAL PUBLIC LICENSE
  */
 class Paypal {
 	
@@ -60,7 +60,7 @@ class Paypal {
 	 * Get a button as html
 	 * Use getButtonParams and getButtonAction if you need to customise
 	 *
-	 * @param PaypalProduct|array $products of PaypalProduct
+	 * @param PaypalProduct|array $products {@link PaypalProduct}
 	 * @param string $paidURL URL paypal returns user to when completed
 	 * @param string $cancelURL URL to return to if user cancels payment
 	 * @param string $notifyURL URL for instant notifications
@@ -87,7 +87,7 @@ class Paypal {
 	 * use <input type="hidden" name="$key" value="$value" />
 	 * for each element of the array returned
 	 * 
-	 * @param PaypalProduct|array $products of PaypalProduct
+	 * @param PaypalProduct|array $products {@link PaypalProduct}
 	 * @param string $paidURL URL paypal returns user to when completed
 	 * @param string $cancelURL URL to return to if user cancels payment
 	 * @param string $notifyURL URL for instant notifications
@@ -144,7 +144,7 @@ class Paypal {
 	
 	/**
 	* Get form action to go with the params from getButtonParams
-	 * 
+	* 
 	* @return string
 	*/
 	public function getButtonAction() {
@@ -661,94 +661,361 @@ class Paypal {
 	}
 }
 
-
+/**
+ * Describes a notification
+ */
 class PaypalNotification {
+	/**
+	 * The business and currency are correct
+	 * @var bool
+	 */
 	public $ok;
 	
+	/**
+	 * Either {@link PaypalNotification::REFUND} or {@link PaypalNotification::CART}
+	 * @var string
+	 */
 	public $type;
+	/**
+	 * type for refund notification
+	 */
 	const REFUND = 'refund';
+	/**
+	 * type for cart notification
+	 */
 	const CART = 'cart';
 	
+	/**
+	 * Type of transaction (paypal)
+	 * @var string 
+	 */
 	public $transactionType;
+	/**
+	 * Paypals id for this transaction
+	 * @var string
+	 */
 	public $transactionId;
+	/**
+	 * The origonal transaction (for refunds)
+	 * @var string
+	 */
 	public $parentTransactionId;
+	/**
+	 * The invoice id you sent as part of this transaction
+	 * @var int
+	 */
 	public $invoiceId;
+	/**
+	 * The custom data you sent
+	 * @var string
+	 */
 	public $custom;
+	/**
+	 * The total amount paid
+	 * You should check this is what you expect it to be
+	 * @var double
+	 */
 	public $amount;
+	/**
+	 * Amount paid for shipping
+	 * @var double
+	 */
 	public $shipping;
+	/**
+	 * Amount paid for handling
+	 * @var double
+	 */
 	public $handling;
+	/**
+	 * The paypal fee (you received {@link $amount}-{@link $fee})
+	 * @var double
+	 */
 	public $fee;
+	/**
+	 * Note left by buyer (if you allowed him to leave it)
+	 * @var string
+	 */
 	public $note;
+	/**
+	 * Who was paid
+	 * @var string
+	 */
 	public $business;
+	/**
+	 * Was it the right person paid
+	 * @var bool
+	 */
 	public $businessCorrect;
+	/**
+	 * Status of payment
+	 * might be Completed, Pending, Refunded, etc
+	 * @var string
+	 */
 	public $status;
+	/**
+	 * If $status == 'Pending' this is why
+	 * @var string
+	 */
 	public $pendingReason;
+	/**
+	 * Time the payment was made (unix timestamp)
+	 * @var int
+	 */
 	public $date;
+	/**
+	 * Has this notification been sent before
+	 * @var bool
+	 */
 	public $resent;
 	
 	/**
-	* @var PaypalBuyer
-	*/
+	 * Info about buyer
+	 * @var PaypalBuyer
+	 */
 	public $buyer;
+	
 	/**
-	* @var array of PaypalProduct
-	*/
+	 * The product purchased in this transaction
+	 * Can be used to check the right amounts where paid and the cart is what you expected
+	 * @var array {@link PaypalProduct}
+	 */
 	public $products;
 }
 
+/**
+ * Describes the buyer of your product, this info is received in notifications
+ */
 class PaypalBuyer {
+	/**
+	 * Unique id for this buyer
+	 * @var string
+	 */
 	public $id;
+	/**
+	 * First name
+	 * @var string
+	 */
 	public $firstName;
+	/**
+	 * Last name
+	 * @var string
+	 */
 	public $lastName;
+	/**
+	 * Email
+	 * @var string
+	 */
 	public $email;
+	/**
+	 * business name if has one
+	 * @var string
+	 */
 	public $business;
+	/**
+	 * contact phone
+	 * @var string
+	 */
 	public $phone;
+	/**
+	 * status, ie verified or not
+	 * @var string
+	 */
 	public $status;
+	/**
+	 * Country
+	 * @var string
+	 */
 	public $addressCountry;
+	/**
+	 * Country code ie gb or fr etc
+	 * @var string 
+	 */
 	public $addressCountryCode;
+	/**
+	 * Zip code or similar
+	 * @var string
+	 */
 	public $addressZip;
+	/**
+	 * State
+	 * @var string 
+	 */
 	public $addressState;
+	/**
+	 * City
+	 * @var string 
+	 */
 	public $addressCity;
+	/**
+	 * Street
+	 * @var string
+	 */
 	public $addressStreet;
+	/**
+	 * Name to be used with address
+	 * @var string
+	 */
 	public $addressName;
+	/**
+	 * status of address, ie verifed or not
+	 * @var string 
+	 */
 	public $addressStatus;
 }
 
+/**
+ * Describes a product to be sold
+ * Some vars effect selling
+ * Some are set when receiving a notification
+ */
 class PaypalProduct {
-	public $id;
-	public $name;
-	public $quantity;
-	public $handling; //overall handling for these items
 	/**
-	* Vars for button creation
-	*/
-	public $amount; //per item
-	public $discount; //overall discount for these items
-	public $tax; //overall tax for these items
-	public $shipping; //shipping for first item
-	public $shipping2; //shipping for futher items
+	 * unique id of this product
+	 * @var int
+	 */
+	public $id;
+	/**
+	 * name of product
+	 * @var string
+	 */
+	public $name;
+	/**
+	 * quanitity of product to sell
+	 * @var int
+	 */
+	public $quantity;
+	/**
+	 * overall handling fee for these items
+	 * @var double
+	 */
+	public $handling;
+	
+	/**
+	 * Cost per item
+	 * @var double
+	 */
+	public $amount;
+	/**
+	 * discount given for all these items
+	 * @var double
+	 */
+	public $discount;
+	/**
+	 * tax for all these items
+	 * @var double
+	 */
+	public $tax;
+	/**
+	 * cost of shipping the first of these items
+	 * @var double
+	 */
+	public $shipping;
+	/**
+	 * cost of shipping futher items 
+	 * @var double
+	 */
+	public $shipping2;
+	/**
+	 * weight of this item if your accout is setup to use weight base shipping
+	 * @var double
+	 */
 	public $weight;
 	
 	/**
-	* Vars for notifications
-	*/
+	 * total amount paid for these items
+	 * Set when received by notification
+	 * @var double
+	 */
 	public $total;
+	/**
+	 * total amount of shipping paid for these items
+	 * Set when received by notification
+	 * @var double
+	 */
 	public $shipppingTotal;
+	/**
+	 * total fee paid to paypal for these items
+	 * Set when received by notification
+	 * (ie you received {@link $total}-{@link $fee})
+	 * @var double
+	 */
 	public $fee;
 }
 
+/**
+ * Settings used in paypal transactions
+ */
 class PaypalSettings {
+	
+	/**
+	 * Currency, default is GBP, might be USD or something else
+	 * @var string
+	 */
 	public $currency = 'GBP';
+	
+	/**
+	 * Local to use on paypal pages, default is GB
+	 * @var string 
+	 */
 	public $local = 'GB';
+	
+	/**
+	 * Text for cancel button show on paypal pages
+	 * @var string
+	 */
 	public $cancelBtn = 'Return to merchant';
+	
+	/**
+	 * Can the user change the quantity of items in cart
+	 * @var bool
+	 */
 	public $canChooseQuantity = false;
+	
+	/**
+	 * Whether to collect shipping info
+	 * @var bool
+	 */
 	public $shippingInfoNeeded = false;
+	
+	/**
+	 * Allow user to leave a note
+	 * @var bool
+	 */
 	public $allowMerchantNote = false;
+	
+	/**
+	 * URL of logo image for paypal pages
+	 * @var string
+	 */
 	public $imageURL = null;
+	
+	/**
+	 * Color of paypal area on paypal pages
+	 * eg 'ff0000' for red
+	 * @var string
+	 */
 	public $payflowColor = null;
+	
+	/**
+	 * Backgroundcolor of header area
+	 * eg 'ff0000' for red
+	 * @var string
+	 */
 	public $headerBackgroundColor = null;
+	
+	/**
+	 * Color of 2px border around the header
+	 * eg 'ff0000' for red
+	 * @var string
+	 */
 	public $headerBorderColor = null;
+	
+	/**
+	 * If you use weight based shipping costyou should set the unit of item weights
+	 * @var string
+	 */
 	public $weightUnit = null;
+	
 }
 
 /**
