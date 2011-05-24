@@ -35,7 +35,7 @@ $auth = new PaypalAuthenticaton('seller_1305978152_biz@gmail.com',
 $paypal = new Paypal($auth);
 
 //the base url
-$me = "http://mcfedr.dnsdojo.net/~mcfedr/paypal-php/test/";
+$me = "http://mcfedr.dnsdojo.net/~mcfedr/paypal/test/";
 
 //find out what we are doing, the default is start
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'start';
@@ -78,10 +78,10 @@ if($action == 'notify') {
 			$email = isset($_REQUEST['email']) ? $_REQUEST['email'] : '';
 			$amount = isset($_REQUEST['amount']) ? $_REQUEST['amount'] : '';
 			$emails = explode(',', $email);
-			$amounts = explode(',', $amounts);
+			$amounts = explode(',', $amount);
 			$sent = $paypal->sendPayment($emails, $amounts);
 			echo "<h1>send</h1>";
-			if($refunded) {
+			if($sent) {
 				echo "<p>You sent the payment(s)</p>";
 			}
 			else {
@@ -142,7 +142,8 @@ if($action == 'notify') {
 		//default is the last txn_id
 		$txn_id = isset($_REQUEST['txn_id']) ? $_REQUEST['txn_id'] : '';
 		echo "<input type=\"hidden\" name=\"action\" value=\"refund\"/>";
-		echo "<input type=\"text\" name=\"txn_id\" value=\"$txn_id\"/>";
+		echo "<label for=\"txn_id\">Transaction ID</label>";
+		echo "<input type=\"text\" id=\"txn_id\" name=\"txn_id\" value=\"$txn_id\"/>";
 		echo "<button type=\"submit\">Refund</button>";
 		echo "</form>";
 		
@@ -151,9 +152,11 @@ if($action == 'notify') {
 		echo "<form action=\"$me\" method=\"post\">";
 		echo "<input type=\"hidden\" name=\"action\" value=\"send\"/>";
 		$email = isset($_REQUEST['email']) ? $_REQUEST['email'] : '';
-		echo "<input type=\"text\" name=\"email\" value=\"$email\"/>";
+		echo "<label for=\"email\">Email(s)</label>";
+		echo "<input type=\"text\" id=\"email\" name=\"email\" value=\"$email\"/>";
 		$amount = isset($_REQUEST['amount']) ? $_REQUEST['amount'] : '';
-		echo "<input type=\"text\" name=\"amount\" value=\"$amount\">";
+		echo "<label for=\"amount\">Amount</label>";
+		echo "<input type=\"text\" id=\"amount\" name=\"amount\" value=\"$amount\">";
 		echo "<button type=\"submit\">Send</button>";
 		echo "</form>";
 		

@@ -431,6 +431,8 @@ class Paypal {
 	/**
 	 * Send a payment to an email address
 	 * Users MassPayments API
+	 * Warning, this works straight away, no confirming or anything
+	 * Money is sent instantly
 	 * 
 	 * @param string|array $email one or more email addresses to send payment to
 	 * @param string|array $amount amount to send to each address
@@ -442,8 +444,8 @@ class Paypal {
 		if(is_array($email) || is_array($amount)) {
 			if(($count = count($email)) == count($amount)) {
 				for($i = 0;$i < $count; $i++) {
-					$params['L_EMAIL$i'] = $email[$i];
-					$params['L_AMT$i'] = $amount[$i];
+					$params["L_EMAIL$i"] = $email[$i];
+					$params["L_AMT$i"] = $amount[$i];
 				}
 			}
 			else {
