@@ -260,9 +260,9 @@ class Paypal {
 			}
 			$handled->ok = $handled->businessCorrect && $handled->currencyCorrect && isset($handled->type);
 		}
-		//if(!$handled->ok) {
+		if(!$handled->ok || $this->settings->logNotifications) {
 			$this->error(($verified ? '' : 'Unverified ') . ($handled->ok ? '' : 'Unhandled ') . 'paypal notification ' . $this->urlPairs($vars));
-		//}
+		}
 		return $handled;
 	}
 	
@@ -1037,6 +1037,8 @@ class PaypalSettings {
 	 * @var string
 	 */
 	public $weightUnit = null;
+	
+	public $logNotifications = false;
 	
 }
 
