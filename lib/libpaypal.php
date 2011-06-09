@@ -748,7 +748,29 @@ class PaypalNotification {
 	public $businessCorrect;
 	/**
 	 * Status of payment
-	 * might be Completed, Pending, Refunded, etc
+	 * The status of the payment: 
+	 * <b>Canceled_Reversal:</b> A reversal has been canceled. For example, you
+	 * won a dispute with the customer, and the funds for the transaction
+	 * that was reversed have been returned to you.
+	 * <b>Completed:</b> The payment has been completed,
+	 * and the funds have been added successfully to your account balance.
+	 * <b>Created:</b> A German ELV payment is made using Express Checkout.
+	 * <b>Denied:</b> You denied the payment.
+	 * This happens only if the payment was previously pending because of 
+	 * possible reasons described for the pending_reason variable
+	 * or the Fraud_Management_Filters_x variable.
+	 * <b>Expired:</b> This authorization has expired and cannot be captured.
+	 * <b>Failed:</b> The payment has failed.
+	 * This happens only if the payment was made from your
+	 * customer’s bank account.
+	 * <b>Pending:</b> The payment is pending. See pending_reason for more information.
+	 * <b>Refunded:</b> You refunded the payment.
+	 * <b>Reversed:</b> A payment was reversed due to a chargeback or other type of
+	 * reversal. The funds have been removed from your account balance
+	 * and returned to the buyer. The reason for the reversal is
+	 * specified in the ReasonCode element.
+	 * <b>Processed:</b> A payment has been accepted.
+	 * <b>Voided:</b> This authorization has been voided.
 	 * @var string
 	 */
 	public $status;
