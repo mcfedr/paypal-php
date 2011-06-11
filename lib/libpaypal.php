@@ -331,7 +331,7 @@ class Paypal {
 		if(isset($vars["item_name1"])) {
 			$i = 1;
 			while(isset($vars["item_name$i"])) {
-				$info->products[] = $this->getProduct($vars, $i);
+				$info->products[] = $this->getProduct($vars, $i, $info);
 				$i++;
 			}
 		}
@@ -346,9 +346,10 @@ class Paypal {
 	 * 
 	 * @param array $vars
 	 * @param string $number use when more than one product eg '1', '2'
+	 * @param PaypalNotification
 	 * @return PaypalProduct 
 	 */
-	private function getProduct($vars, $number = '') {
+	private function getProduct($vars, $number = '', $info) {
 		$product = new PaypalProduct();
 		if(isset($vars["item_number$number"])) {
 			$product->id = $vars["item_number$number"];
@@ -365,12 +366,6 @@ class Paypal {
 		if(isset($vars["mc_handling$number"])) {
 			$product->handling = $vars["mc_handling$number"];
 		}
-		if(isset($vars["mc_fee_$number"])) {
-			$product->fee = $vars["mc_fee_$number"];
-		}
-		else if(isset($vars["mc_fee$number"])) {
-			$product->fee = $vars["mc_fee$number"];
-		}
 		if(isset($vars["mc_gross_$number"])) {
 			$product->total = $vars["mc_gross_$number"];
 			$product->amount = $product->total - (empty($product->shippingTotal) ? 0 : $product->shippingTotal) - (empty($product->handling) ? 0 : $product->handling);
@@ -378,6 +373,15 @@ class Paypal {
 		else if(isset($vars["mc_gross$number"])) {
 			$product->total = $vars["mc_gross$number"];
 			$product->amount = $product->total - (empty($product->shippingTotal) ? 0 : $product->shippingTotal) - (empty($product->handling) ? 0 : $product->handling);
+		}
+		if(isset($vars["mc_fee_$number"])) {
+			$product->fee = $vars["mc_fee_$number"];
+		}
+		else if(isset($vars["mc_fee$number"])) {
+			$product->fee = $vars["mc_fee$number"];
+		}
+		else {
+			$product->fee = ($product->amount / $info->amount) * $info->fee;
 		}
 		return $product;
 	}
