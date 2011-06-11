@@ -304,6 +304,9 @@ class Paypal {
 		if(isset($vars['mc_shipping'])) {
 			$info->shipping = $vars['mc_shipping'];
 		}
+		else if(isset($vars['shipping'])) {
+			$info->shipping = $vars['shipping'];
+		}
 		if(isset($vars['mc_fee'])) {
 			$info->fee = $vars['mc_fee'];
 		}
@@ -362,11 +365,18 @@ class Paypal {
 		if(isset($vars["mc_handling$number"])) {
 			$product->handling = $vars["mc_handling$number"];
 		}
-		if(isset($vars["mc_fee$number"])) {
+		if(isset($vars["mc_fee_$number"])) {
+			$product->fee = $vars["mc_fee_$number"];
+		}
+		else if(isset($vars["mc_fee$number"])) {
 			$product->fee = $vars["mc_fee$number"];
 		}
 		if(isset($vars["mc_gross_$number"])) {
 			$product->total = $vars["mc_gross_$number"];
+			$product->amount = $product->total - (empty($product->shippingTotal) ? 0 : $product->shippingTotal) - (empty($product->handling) ? 0 : $product->handling);
+		}
+		else if(isset($vars["mc_gross$number"])) {
+			$product->total = $vars["mc_gross$number"];
 			$product->amount = $product->total - (empty($product->shippingTotal) ? 0 : $product->shippingTotal) - (empty($product->handling) ? 0 : $product->handling);
 		}
 		return $product;
