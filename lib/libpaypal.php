@@ -295,9 +295,6 @@ class Paypal {
 		if(isset($vars['pending_reason'])) {
 			$info->pendingReason = $vars['pending_reason'];
 		}
-		if(isset($vars['mc_gross'])) {
-			$info->amount = $vars['mc_gross'];
-		}
 		if(isset($vars['mc_handling'])) {
 			$info->handling = $vars['mc_handling'];
 		}
@@ -306,6 +303,10 @@ class Paypal {
 		}
 		else if(isset($vars['shipping'])) {
 			$info->shipping = $vars['shipping'];
+		}
+		if(isset($vars['mc_gross'])) {
+			$info->total = $vars['mc_gross'];
+			$info->amount = $info->total - (isset($info->handling) ? $info->handling : 0) - (isset($info->shipping) ? $info->shipping : 0);
 		}
 		if(isset($vars['mc_fee'])) {
 			$info->fee = $vars['mc_fee'];
@@ -381,7 +382,7 @@ class Paypal {
 			$product->fee = $vars["mc_fee$number"];
 		}
 		else {
-			$product->fee = ($product->amount / $info->amount) * $info->fee;
+			$product->fee = ($product->total / $info->total) * $info->fee;
 		}
 		return $product;
 	}
@@ -450,25 +451,63 @@ class Paypal {
 	 * 
 	 * @param string|array $email one or more email addresses to send payment to
 	 * @param string|array $amount amount to send to each address
+	 * @param string|array $id unique id for the payment
+	 * @param string|array $note note to the user
+	 * @param string $subject subject for email
 	 * @return bool whether succesful or not 
 	 */
-	public function sendPayment($email, $amount) {
+	public function sendPayment($email, $amount, $id = '', $note = '', $subject = null) {
 		$params = array();
 		$params['RECEIVERTYPE'] = 'EmailAddress';
-		if(is_array($email) || is_array($amount)) {
-			if(($count = count($email)) == count($amount)) {
-				for($i = 0;$i < $count; $i++) {
-					$params["L_EMAIL$i"] = $email[$i];
+		$params['EMAILSUBJECT'] = substr($subject, 0, 255);
+		if(is_array($email)) {
+			$count = count($email);
+			
+			$amountArray = is_array($amount);
+			if($amountArray && count($amount) != $count) {
+				return false;
+			}
+			
+			$idArray = is_array($id);
+			if($idArray && count($id) != $count) {
+				return false;
+			}
+			
+			$noteArray = is_array($note);
+			if($noteArray && count($note) != $count) {
+				return false;
+			}
+			
+			for($i = 0;$i < $count; $i++) {
+				$params["L_EMAIL$i"] = $email[$i];
+				if($amountArray) {
 					$params["L_AMT$i"] = $amount[$i];
 				}
-			}
-			else {
-				return false;
+				else {
+					$params["L_AMT$i"] = $amount;
+				}
+				
+				if($idArray) {
+					$params["L_UNIQUEID$i"] = substr($id[$i], 0, 30);
+				}
+				else {
+					$params["L_UNIQUEID$i"] = substr($id, 0, 30);
+				}
+				
+				if($noteArray) {
+					$params["L_NOTE$i"] = substr($note[$i], 0, 4000);
+				}
+				else {
+					$params["L_NOTE$i"] = substr($note, 0, 4000);
+				}
 			}
 		}
 		else {
 			$params['L_EMAIL0'] = $email;
 			$params['L_AMT0'] = $amount;
+			$params['L_UNIQUEID0'] = substr($id, 0, 30);
+			$params['L_NOTE0'] = substr($note, 0, 4000);
+			
 		}
 		$params['CURRENCYCODE'] = $this->settings->currency;
 		$response = $this->callPaypalNVP('MassPay', $params);
@@ -729,6 +768,12 @@ class PaypalNotification {
 	 * You should check this is what you expect it to be
 	 * @var double
 	 */
+	public $total;
+	
+	/**
+	 * The amount paid minus shipping and handling
+	 * @var double 
+	 */
 	public $amount;
 	/**
 	 * Amount paid for shipping
@@ -760,6 +805,19 @@ class PaypalNotification {
 	 * @var bool
 	 */
 	public $businessCorrect;
+	
+	/**
+	 * Currency paid in
+	 * @var string 
+	 */
+	public $currency;
+	
+	/**
+	 * Is this the currency expected
+	 * @var bool
+	 */
+	public $currencyCorrect;
+	
 	/**
 	 * Status of payment
 	 * The status of the payment: 
@@ -1064,6 +1122,7 @@ class PaypalAuthenticaton {
 	private $username;
 	private $password;
 	private $signiture;
+	private $sandbox;
 	
 	public function __construct($email, $username, $password, $signiture, $sandbox = false) {
 		$this->email = $email;
