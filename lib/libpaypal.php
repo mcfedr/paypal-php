@@ -66,12 +66,13 @@ class Paypal {
 	 * @param string $notifyURL URL for instant notifications
 	 * @param int $invoiceId Your id for this payment, must be unique
 	 * @param string $custom Custom data that will be in any notifications
+	 * @param PaypalBuyer $buyer Info about the buyer to autofill in
 	 * @param string label Label for the button
 	 * @return string html form with a button
 	 */
-	public function getButton($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null, $label = "Checkout") {
+	public function getButton($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null, $buyer = null, $label = "Checkout") {
 		$action = $this->getButtonAction();
-		$params = $this->getButtonParams($products, $paidURL, $cancelURL, $notifyURL, $invoiceId, $custom);
+		$params = $this->getButtonParams($products, $paidURL, $cancelURL, $notifyURL, $invoiceId, $custom, $buyer);
 		$ret = "<form action=\"$action\" method=\"post\">";
 		foreach($params as $key => $value) {
 			$ret .= "<input type=\"hidden\" name=\"$key\" value=\"$value\"/>";
@@ -93,9 +94,10 @@ class Paypal {
 	 * @param string $notifyURL URL for instant notifications
 	 * @param int $invoiceId Your id for this payment, must be unique
 	 * @param string $custom Custom data that will be in any notifications
+	 * @param PaypalBuyer $buyer Info about the buyer to autofill in
 	 * @return array of string 
 	 */
-	public function getButtonParams($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null) {
+	public function getButtonParams($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null, $buyer = null) {
 		$params = array();
 		if(!is_array($products) || count($products) == 1) {
 			if(!is_array($products)) {
@@ -131,10 +133,9 @@ class Paypal {
 			$params['invoice'] = $invoiceId;
 		}
 		
-		//$params['email'] = $email;
-		//$space = strpos($name, ' ');
-		//$params['first_name'] = $space === false ? $name : substr($name, 0, $space);
-		//$params['last_name'] = $space === false ? '' : substr($name, $space + 1);
+		if(!empty($buyer)) {
+			$this->setBuyerParams($buyer, $params);
+		}
 		
 		$this->setSettingsParams($this->settings, $params);
 		
@@ -142,6 +143,25 @@ class Paypal {
 		return $params;
 	}
 	
+	/**
+	 * Set params in button for buyer
+	 * @param PaypalBuyer $buyer
+	 * @param array $params 
+	 */
+	private function setBuyerParams($buyer, &$params) {
+		if(!empty($buyer->email)) {
+			$params['email'] = $buyer->email;
+		}
+		if(!empty ($buyer->firstName)) {
+			$params['first_name'] = $buyer->firstName;
+		}
+		if(!empty($buyer->lastName)) {
+			$params['last_name'] = $buyer->lastName;
+		}
+		//TODO: address fields
+	}
+
+
 	/**
 	* Get form action to go with the params from getButtonParams
 	* 
@@ -240,12 +260,16 @@ class Paypal {
 		}
 		$handled = false;
 		if(($verified = $this->verifyNotification($vars))) {
-			$handled = $this->getNotification($vars);
 			if(isset($vars['txn_type'])) {
 				switch($vars['txn_type']) {
 					case 'cart':
 					case 'web_accept':
+						$handled = $this->getNotification($vars);
 						$handled->type = PaypalNotification::CART;
+						break;
+					case 'masspay':
+						$handled = $this->getMassNotifications($vars);
+						$handled->type = PaypalNotification::MASSPAY;
 						break;
 				}
 			}
@@ -254,16 +278,79 @@ class Paypal {
 					case 'Refunded':
 					case 'Reversed':
 					case 'Canceled_Reversal':
-						$handled->type = PaypalNotification::REFUND;;
+						$handled = $this->getNotification($vars);
+						$handled->type = PaypalNotification::REFUND;
 						break;
 				}
 			}
-			$handled->ok = $handled->businessCorrect && $handled->currencyCorrect && isset($handled->type);
+			
 		}
 		if(!$handled->ok || $this->settings->logNotifications) {
 			$this->error(($verified ? '' : 'Unverified ') . ($handled->ok ? '' : 'Unhandled ') . 'paypal notification ' . $this->urlPairs($vars));
 		}
 		return $handled;
+	}
+	
+	private function getMassNotifications($vars) {
+		$info = new PaypalNotification();
+		
+		if(isset($vars['payment_status'])) {
+			$info->status = $vars['payment_status'];
+		}
+		if(isset($vars['pending_reason'])) {
+			$info->pendingReason = $vars['pending_reason'];
+		}
+		
+		$info->notifications = array();
+		$info->ok = true;
+		for($i = 1; isset($vars["status_$i"]); $i++) {
+			$n = $this->getMassNotification($vars, $i);
+			$info->notifications[] = $n;
+			$info->ok = $info->ok && $n->ok;
+		}
+		if(empty($info->notifications)) {
+			$info->ok = false;
+		}
+		return $info;
+	}
+	
+	private function getMassNotification($vars, $i) {
+		$info = new PaypalNotification();
+		$info->type = PaypalNotification::MASSPAY;
+		
+		if(isset($vars['txn_type'])) {
+			$info->transactionType = $_POST['txn_type'];
+		}
+		if(isset($vars["masspay_txn_id_$i"])) {
+			$info->transactionId = $vars["masspay_txn_id_$i"];
+		}
+		if(isset($vars["unique_id_$i"])) {
+			$info->invoiceId = $vars["unique_id_$i"];
+		}
+		if(isset($vars["mc_gross_$i"])) {
+			$info->total = $vars["mc_gross_$i"];
+			$info->amount = $info->total;
+		}
+		if(isset($vars["mc_fee_$i"])) {
+			$info->fee = $vars["mc_fee_$i"];
+		}
+		if(isset($vars["status_$i"])) {
+			$info->status = $vars["status_$i"];
+		}
+		if(isset($vars["mc_currency_$i"])) {
+			$info->currency = $vars["mc_currency_$i"];
+			$info->currencyCorrect = $info->currency == $this->settings->currency;
+		}
+		if(isset($vars['payer_email'])) {
+			$info->business = $vars['payer_email'];
+			$sandbox = isset($vars['test_ipn']) && $vars['test_ipn'] == 1;
+			$info->businessCorrect = $info->business == $this->authentication->getEmail() && $sandbox == $this->authentication->isSandbox();
+		}
+		if(isset($vars['payment_date'])) {
+			$info->date = strtotime($vars['payment_date']);
+		}
+		$info->ok = $info->businessCorrect && $info->currencyCorrect;
+		return $info;
 	}
 	
 	/**
@@ -313,7 +400,7 @@ class Paypal {
 		}
 		if(isset($vars['mc_currency'])) {
 			$info->currency = $vars['mc_currency'];
-			$info->currencyCorrect = $vars['mc_currency'] == $this->settings->currency;
+			$info->currencyCorrect = $info->currency == $this->settings->currency;
 		}
 		if(isset($vars['payment_date'])) {
 			$info->date = strtotime($vars['payment_date']);
@@ -328,17 +415,15 @@ class Paypal {
 		}
 		$info->resent = isset($vars['resend']) && $vars['resend'] == 'true';
 		$info->buyer = $this->getBuyer($vars);
+		
 		$info->products = array();
-		if(isset($vars["item_name1"])) {
-			$i = 1;
-			while(isset($vars["item_name$i"])) {
-				$info->products[] = $this->getProduct($vars, $i, $info);
-				$i++;
-			}
+		for($i = 1; isset($vars["item_name$i"]); $i++) {
+			$info->products[] = $this->getProduct($vars, $i, $info);
 		}
-		else if(isset($vars['item_name'])) {
-			$info->products[] = $this->getProduct($vars);
+		if(isset($vars['item_name'])) {
+			$info->products[] = $this->getProduct($vars, '', $info);
 		}
+		$info->ok = $info->businessCorrect && $info->currencyCorrect;
 		return $info;
 	}
 	
@@ -737,6 +822,10 @@ class PaypalNotification {
 	 * type for cart notification
 	 */
 	const CART = 'cart';
+	/**
+	 * type for masspay notification
+	 */
+	const MASSPAY = 'masspay';
 	
 	/**
 	 * Type of transaction (paypal)
@@ -874,6 +963,12 @@ class PaypalNotification {
 	 * @var array {@link PaypalProduct}
 	 */
 	public $products;
+	
+	/**
+	 * Sub notifications, used by masspay
+	 * @var array {@link PaypalNotification}
+	 */
+	public $notifications;
 }
 
 /**
