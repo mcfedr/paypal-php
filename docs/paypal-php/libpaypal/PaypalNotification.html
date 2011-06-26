@@ -24,7 +24,7 @@
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Describes a notification</p>
 		<p class="notes">
-			Located in <a class="field" href="_lib---libpaypal.php.html">/lib/libpaypal.php</a> (line <span class="field">667</span>)
+			Located in <a class="field" href="_lib---libpaypal.php.html">/lib/libpaypal.php</a> (line <span class="field">805</span>)
 		</p>
 		
 				
@@ -53,6 +53,11 @@
 				</div>
 								<div class="const-title">
 					<img src="../../media/images/Constant.png" alt=" " />
+					<a href="#MASSPAY" title="details" class="const-name">MASSPAY</a> = 					<span class="var-type"> 'masspay'</span>
+
+				</div>
+								<div class="const-title">
+					<img src="../../media/images/Constant.png" alt=" " />
 					<a href="#REFUND" title="details" class="const-name">REFUND</a> = 					<span class="var-type"> 'refund'</span>
 
 				</div>
@@ -71,7 +76,7 @@
 					</div>
 		<div class="info-box-body">
 			<div class="var-summary">
-																																																																																																																																																																																<div class="var-title">
+																																																																																																																																																																																																																<div class="var-title">
 					<span class="var-type">double</span>
 					<a href="#$amount" title="details" class="var-name">$amount</a>
 				</div>
@@ -86,6 +91,14 @@
 																<div class="var-title">
 					<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>
 					<a href="#$buyer" title="details" class="var-name">$buyer</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$currency" title="details" class="var-name">$currency</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">bool</span>
+					<a href="#$currencyCorrect" title="details" class="var-name">$currencyCorrect</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">string</span>
@@ -110,6 +123,10 @@
 																<div class="var-title">
 					<span class="var-type">string</span>
 					<a href="#$note" title="details" class="var-name">$note</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">array</span>
+					<a href="#$notifications" title="details" class="var-name">$notifications</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">bool</span>
@@ -138,6 +155,10 @@
 																<div class="var-title">
 					<span class="var-type">string</span>
 					<a href="#$status" title="details" class="var-name">$status</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">double</span>
+					<a href="#$total" title="details" class="var-name">$total</a>
 				</div>
 																<div class="var-title">
 					<span class="var-type">string</span>
@@ -175,13 +196,12 @@
 		<span class="var-title">
 			<span class="var-type">double</span>
 			<span class="var-name">$amount</span>
-						(line <span class="line-number">718</span>)
+						(line <span class="line-number">866</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">The total amount paid</p>
-<p class="description"><p>You should check this is what you expect it to be</p></p>
+<p class="short-description">The amount paid minus shipping and handling</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -198,7 +218,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$business</span>
-						(line <span class="line-number">743</span>)
+						(line <span class="line-number">891</span>)
 		</span>
 	</div>
 
@@ -220,7 +240,7 @@
 		<span class="var-title">
 			<span class="var-type">bool</span>
 			<span class="var-name">$businessCorrect</span>
-						(line <span class="line-number">748</span>)
+						(line <span class="line-number">896</span>)
 		</span>
 	</div>
 
@@ -242,12 +262,56 @@
 		<span class="var-title">
 			<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>
 			<span class="var-name">$buyer</span>
-						(line <span class="line-number">797</span>)
+						(line <span class="line-number">958</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Info about buyer</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$currency" id="$currency"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$currency</span>
+						(line <span class="line-number">902</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Currency paid in</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$currencyCorrect" id="$currencyCorrect"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$currencyCorrect</span>
+						(line <span class="line-number">908</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Is this the currency expected</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -264,7 +328,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$custom</span>
-						(line <span class="line-number">712</span>)
+						(line <span class="line-number">854</span>)
 		</span>
 	</div>
 
@@ -286,7 +350,7 @@
 		<span class="var-title">
 			<span class="var-type">int</span>
 			<span class="var-name">$date</span>
-						(line <span class="line-number">786</span>)
+						(line <span class="line-number">947</span>)
 		</span>
 	</div>
 
@@ -308,7 +372,7 @@
 		<span class="var-title">
 			<span class="var-type">double</span>
 			<span class="var-name">$fee</span>
-						(line <span class="line-number">733</span>)
+						(line <span class="line-number">881</span>)
 		</span>
 	</div>
 
@@ -330,7 +394,7 @@
 		<span class="var-title">
 			<span class="var-type">double</span>
 			<span class="var-name">$handling</span>
-						(line <span class="line-number">728</span>)
+						(line <span class="line-number">876</span>)
 		</span>
 	</div>
 
@@ -352,7 +416,7 @@
 		<span class="var-title">
 			<span class="var-type">int</span>
 			<span class="var-name">$invoiceId</span>
-						(line <span class="line-number">707</span>)
+						(line <span class="line-number">849</span>)
 		</span>
 	</div>
 
@@ -374,7 +438,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$note</span>
-						(line <span class="line-number">738</span>)
+						(line <span class="line-number">886</span>)
 		</span>
 	</div>
 
@@ -389,14 +453,37 @@
 		
 
 </div>
-<a name="var$ok" id="$ok"><!-- --></A>
+<a name="var$notifications" id="$notifications"><!-- --></A>
 <div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$notifications</span>
+						(line <span class="line-number">971</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Sub notifications, used by masspay</p>
+	<ul class="tags">
+				<li><span class="field">var:</span> <a href="../../paypal-php/libpaypal/PaypalNotification.html">PaypalNotification</a></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$ok" id="$ok"><!-- --></A>
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">bool</span>
 			<span class="var-name">$ok</span>
-						(line <span class="line-number">672</span>)
+						(line <span class="line-number">810</span>)
 		</span>
 	</div>
 
@@ -412,13 +499,13 @@
 
 </div>
 <a name="var$parentTransactionId" id="$parentTransactionId"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$parentTransactionId</span>
-						(line <span class="line-number">702</span>)
+						(line <span class="line-number">844</span>)
 		</span>
 	</div>
 
@@ -434,13 +521,13 @@
 
 </div>
 <a name="var$pendingReason" id="$pendingReason"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$pendingReason</span>
-						(line <span class="line-number">781</span>)
+						(line <span class="line-number">942</span>)
 		</span>
 	</div>
 
@@ -456,13 +543,13 @@
 
 </div>
 <a name="var$products" id="$products"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">array</span>
 			<span class="var-name">$products</span>
-						(line <span class="line-number">804</span>)
+						(line <span class="line-number">965</span>)
 		</span>
 	</div>
 
@@ -480,13 +567,13 @@
 
 </div>
 <a name="var$resent" id="$resent"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">bool</span>
 			<span class="var-name">$resent</span>
-						(line <span class="line-number">791</span>)
+						(line <span class="line-number">952</span>)
 		</span>
 	</div>
 
@@ -502,13 +589,13 @@
 
 </div>
 <a name="var$shipping" id="$shipping"><!-- --></A>
-<div class="evenrow">
+<div class="oddrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">double</span>
 			<span class="var-name">$shipping</span>
-						(line <span class="line-number">723</span>)
+						(line <span class="line-number">871</span>)
 		</span>
 	</div>
 
@@ -524,19 +611,42 @@
 
 </div>
 <a name="var$status" id="$status"><!-- --></A>
-<div class="oddrow">
+<div class="evenrow">
 
 	<div class="var-header">
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$status</span>
-						(line <span class="line-number">776</span>)
+						(line <span class="line-number">937</span>)
 		</span>
 	</div>
 
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Status of payment</p>
 <p class="description"><p>The status of the payment:  <strong>Canceled_Reversal:</strong> A reversal has been canceled. For example, you  won a dispute with the customer, and the funds for the transaction  that was reversed have been returned to you.  <strong>Completed:</strong> The payment has been completed,  and the funds have been added successfully to your account balance.  <strong>Created:</strong> A German ELV payment is made using Express Checkout.  <strong>Denied:</strong> You denied the payment.  This happens only if the payment was previously pending because of  possible reasons described for the pending_reason variable  or the Fraud_Management_Filters_x variable.  <strong>Expired:</strong> This authorization has expired and cannot be captured.  <strong>Failed:</strong> The payment has failed.  This happens only if the payment was made from your  customer’s bank account.  <strong>Pending:</strong> The payment is pending. See pending_reason for more information.  <strong>Refunded:</strong> You refunded the payment.  <strong>Reversed:</strong> A payment was reversed due to a chargeback or other type of  reversal. The funds have been removed from your account balance  and returned to the buyer. The reason for the reversal is  specified in the ReasonCode element.  <strong>Processed:</strong> A payment has been accepted.  <strong>Voided:</strong> This authorization has been voided.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$total" id="$total"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">double</span>
+			<span class="var-name">$total</span>
+						(line <span class="line-number">860</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">The total amount paid</p>
+<p class="description"><p>You should check this is what you expect it to be</p></p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -553,7 +663,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$transactionId</span>
-						(line <span class="line-number">697</span>)
+						(line <span class="line-number">839</span>)
 		</span>
 	</div>
 
@@ -575,7 +685,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$transactionType</span>
-						(line <span class="line-number">692</span>)
+						(line <span class="line-number">834</span>)
 		</span>
 	</div>
 
@@ -597,7 +707,7 @@
 		<span class="var-title">
 			<span class="var-type">string</span>
 			<span class="var-name">$type</span>
-						(line <span class="line-number">678</span>)
+						(line <span class="line-number">816</span>)
 		</span>
 	</div>
 
@@ -636,7 +746,7 @@
 		<span class="const-title">
 			<span class="const-name">CART</span>
 			 = <span class="const-default"> 'cart'</span>
-			(line <span class="line-number">686</span>)
+			(line <span class="line-number">824</span>)
 		</span>
 	</div>
 
@@ -645,15 +755,32 @@
 	
 	
 </div>
-<a name="constREFUND" id="REFUND"><!-- --></A>
+<a name="constMASSPAY" id="MASSPAY"><!-- --></A>
 <div class="evenrow">
+
+	<div class="const-header">
+		<img src="../../media/images/Variable.png" />
+		<span class="const-title">
+			<span class="const-name">MASSPAY</span>
+			 = <span class="const-default"> 'masspay'</span>
+			(line <span class="line-number">828</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">type for masspay notification</p>
+	
+	
+</div>
+<a name="constREFUND" id="REFUND"><!-- --></A>
+<div class="oddrow">
 
 	<div class="const-header">
 		<img src="../../media/images/Variable.png" />
 		<span class="const-title">
 			<span class="const-name">REFUND</span>
 			 = <span class="const-default"> 'refund'</span>
-			(line <span class="line-number">682</span>)
+			(line <span class="line-number">820</span>)
 		</span>
 	</div>
 
@@ -667,7 +794,7 @@
 	</div>
 
 	<p class="notes" id="credit">
-		Documentation generated on Fri, 10 Jun 2011 00:11:49 +0300 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 26 Jun 2011 00:44:57 +0300 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>

@@ -59,7 +59,7 @@
 																<div class="method-definition">
 											<span class="method-result">string</span>
 										<a href="#getButton" title="details" class="method-name">getButton</a>
-											(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$label</span> = <span class="var-default">&quot;Checkout&quot;</span>])
+											(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>], [<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>&nbsp;<span class="var-name">$buyer</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$label</span> = <span class="var-default">&quot;Checkout&quot;</span>])
 									</div>
 																<div class="method-definition">
 											<span class="method-result">string</span>
@@ -69,7 +69,7 @@
 																<div class="method-definition">
 											<span class="method-result">array</span>
 										<a href="#getButtonParams" title="details" class="method-name">getButtonParams</a>
-											(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>])
+											(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>], [<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>&nbsp;<span class="var-name">$buyer</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
 											<span class="method-result">string</span>
@@ -89,7 +89,7 @@
 																<div class="method-definition">
 											<span class="method-result">bool</span>
 										<a href="#sendPayment" title="details" class="method-name">sendPayment</a>
-											(<span class="var-type">string|array</span>&nbsp;<span class="var-name">$email</span>, <span class="var-type">string|array</span>&nbsp;<span class="var-name">$amount</span>)
+											(<span class="var-type">string|array</span>&nbsp;<span class="var-name">$email</span>, <span class="var-type">string|array</span>&nbsp;<span class="var-name">$amount</span>, [<span class="var-type">string|array</span>&nbsp;<span class="var-name">$id</span> = <span class="var-default">''</span>], [<span class="var-type">string|array</span>&nbsp;<span class="var-name">$note</span> = <span class="var-default">''</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$subject</span> = <span class="var-default">null</span>])
 									</div>
 								</div>
 		</div>
@@ -143,7 +143,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">getButton</span> (line <span class="line-number">72</span>)
+		<span class="method-title">getButton</span> (line <span class="line-number">73</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -158,7 +158,7 @@
 		<span class="method-name">
 			getButton
 		</span>
-					(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$label</span> = <span class="var-default">&quot;Checkout&quot;</span>])
+					(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>], [<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>&nbsp;<span class="var-name">$buyer</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$label</span> = <span class="var-default">&quot;Checkout&quot;</span>])
 			</div>
 	
 			<ul class="parameters">
@@ -181,6 +181,9 @@
 				<span class="var-type">string</span>
 				<span class="var-name">$custom</span><span class="var-description">: Custom data that will be in any notifications</span>			</li>
 					<li>
+				<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>
+				<span class="var-name">$buyer</span><span class="var-description">: Info about the buyer to autofill in</span>			</li>
+					<li>
 				<span class="var-type">string</span>
 				<span class="var-name">$label</span><span class="var-description">: label Label for the button</span>			</li>
 				</ul>
@@ -191,7 +194,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">getButtonAction</span> (line <span class="line-number">150</span>)
+		<span class="method-title">getButtonAction</span> (line <span class="line-number">170</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -215,7 +218,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">getButtonParams</span> (line <span class="line-number">98</span>)
+		<span class="method-title">getButtonParams</span> (line <span class="line-number">100</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -231,7 +234,7 @@
 		<span class="method-name">
 			getButtonParams
 		</span>
-					(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>])
+					(<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalProduct.html">PaypalProduct</a>|array</span>&nbsp;<span class="var-name">$products</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$paidURL</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$cancelURL</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$notifyURL</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$invoiceId</span> = <span class="var-default">null</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$custom</span> = <span class="var-default">null</span>], [<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>&nbsp;<span class="var-name">$buyer</span> = <span class="var-default">null</span>])
 			</div>
 	
 			<ul class="parameters">
@@ -253,6 +256,9 @@
 					<li>
 				<span class="var-type">string</span>
 				<span class="var-name">$custom</span><span class="var-description">: Custom data that will be in any notifications</span>			</li>
+					<li>
+				<span class="var-type"><a href="../../paypal-php/libpaypal/PaypalBuyer.html">PaypalBuyer</a></span>
+				<span class="var-name">$buyer</span><span class="var-description">: Info about the buyer to autofill in</span>			</li>
 				</ul>
 		
 			
@@ -261,7 +267,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">getLastError</span> (line <span class="line-number">618</span>)
+		<span class="method-title">getLastError</span> (line <span class="line-number">756</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -285,7 +291,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">handleNotification</span> (line <span class="line-number">237</span>)
+		<span class="method-title">handleNotification</span> (line <span class="line-number">257</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -314,7 +320,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">refundPayment</span> (line <span class="line-number">483</span>)
+		<span class="method-title">refundPayment</span> (line <span class="line-number">621</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -350,7 +356,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">sendPayment</span> (line <span class="line-number">441</span>)
+		<span class="method-title">sendPayment</span> (line <span class="line-number">544</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -366,7 +372,7 @@
 		<span class="method-name">
 			sendPayment
 		</span>
-					(<span class="var-type">string|array</span>&nbsp;<span class="var-name">$email</span>, <span class="var-type">string|array</span>&nbsp;<span class="var-name">$amount</span>)
+					(<span class="var-type">string|array</span>&nbsp;<span class="var-name">$email</span>, <span class="var-type">string|array</span>&nbsp;<span class="var-name">$amount</span>, [<span class="var-type">string|array</span>&nbsp;<span class="var-name">$id</span> = <span class="var-default">''</span>], [<span class="var-type">string|array</span>&nbsp;<span class="var-name">$note</span> = <span class="var-default">''</span>], [<span class="var-type">string</span>&nbsp;<span class="var-name">$subject</span> = <span class="var-default">null</span>])
 			</div>
 	
 			<ul class="parameters">
@@ -376,6 +382,15 @@
 					<li>
 				<span class="var-type">string|array</span>
 				<span class="var-name">$amount</span><span class="var-description">: amount to send to each address</span>			</li>
+					<li>
+				<span class="var-type">string|array</span>
+				<span class="var-name">$id</span><span class="var-description">: unique id for the payment</span>			</li>
+					<li>
+				<span class="var-type">string|array</span>
+				<span class="var-name">$note</span><span class="var-description">: note to the user</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$subject</span><span class="var-description">: subject for email</span>			</li>
 				</ul>
 		
 			
@@ -386,7 +401,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Fri, 10 Jun 2011 00:11:48 +0300 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
+		Documentation generated on Sun, 26 Jun 2011 00:44:57 +0300 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.3</a>
 	</p>
 	</div></body>
 </html>
