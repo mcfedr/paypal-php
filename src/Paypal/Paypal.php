@@ -99,7 +99,7 @@ class Paypal {
 	 */
 	public function getButtonParams($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null, Buyer $buyer = null) {
 		$params = array();
-		if($products instanceof Subscription) {
+		if($products instanceof Products\Subscription) {
 			$params['cmd'] = '_xclick-subscriptions';
 			$products->setParams($params);
 		}

@@ -3,7 +3,7 @@ namespace Paypal;
 /**
 * Class with read only vars for using paypal api's
 */
-class Authenticaton {
+class Authentication {
 	private $email;
 	private $username;
 	private $password;
