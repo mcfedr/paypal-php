@@ -12,10 +12,23 @@ class SubscriptionNotification extends PaymentNotification {
 	public $product;
 	
 	public function __construct($vars) {
+		parent::__construct($vars);
+		
 		if(isset($vars['mc_gross'])) {
 			$this->total = $vars['mc_gross'];
+			$has = true;
+		}
+		else if(isset($vars['mc_amount3'])) {
+			$this->total = $vars['mc_amount3'];
+			$has = true;
+		}
+		else {
+			$has = false;
+		}
+		
+		if($has) {
 			$this->amount = $this->total;
-			$this->product = new \Paypal\Products\Subscription($vars, $this);
+			$this->product = new \Paypal\Products\Subscription($vars);
 		}
 	}
 }

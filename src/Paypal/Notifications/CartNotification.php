@@ -44,10 +44,10 @@ class CartNotification extends PaymentNotification {
 		
 		$this->products = array();
 		for($i = 1; isset($vars["item_name$i"]); $i++) {
-			$this->products[] = new \Paypal\Products\CartProduct($vars, $this, $i);
+			$this->products[] = new \Paypal\Products\CartProduct($vars, $i);
 		}
 		if(isset($vars['item_name'])) {
-			$this->products[] = new \Paypal\Products\CartProduct($vars, $this);
+			$this->products[] = new \Paypal\Products\CartProduct($vars);
 		}
 		return $this;
 	}

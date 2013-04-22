@@ -1,41 +1,17 @@
 <?php
-/**
- * This file tests most of the functionality of libpaypal
- * Host it somewhere that paypal can see it to test notifications
- * which will be logged in php's default log file
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * @author Fred Cox <mcfedr@gmail.com>
- * @copyright Copyright Fred Cox, 2011
- * @package paypal-php
- * @subpackage test
- * @license http://www.gnu.org/licenses/gpl.html GNU GENERAL PUBLIC LICENSE
- */
-require_once('../lib/libpaypal.php');
+require 'common.php';
 
 //Create the authentication
-$auth = new PaypalAuthenticaton('seller_1305978152_biz@gmail.com', 
+$auth = new Paypal\Authentication('seller_1305978152_biz@gmail.com', 
 								'seller_1305978152_biz_api1.gmail.com', 
 								'1305978161', 
 								'ANuWCqPKdl8pa4WYHr9g0kh6hysAAw2yhHObLujRQpilgNH0uanFiO3x',
 								true);
 //Create the paypal object
-$paypal = new Paypal($auth);
+$paypal = new Paypal\Paypal($auth);
 
 //the base url
-$me = "http://mcfedr.dnsdojo.net/~mcfedr/paypal/test/";
+$me = "http://{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}";
 
 //find out what we are doing, the default is start
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'start';
@@ -50,7 +26,7 @@ if($action == 'notify') {
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php $action?></title>
+		<title><?php echo $action?></title>
 	</head>
 	<body>
 		<?php
@@ -90,7 +66,7 @@ if($action == 'notify') {
 			}
 		}
 		//create a product
-		$product = new PaypalProduct();
+		$product = new Paypal\Products\CartProduct();
 		$product->id = 1;
 		$product->name = "Book";
 		$product->amount = 10;
@@ -102,7 +78,7 @@ if($action == 'notify') {
 		$product->handling = 1;
 		
 		//and another
-		$product2 = new PaypalProduct();
+		$product2 = new Paypal\Products\CartProduct();
 		$product2->id = 2;
 		$product2->name = "CD";
 		$product2->amount = 10;
@@ -119,22 +95,49 @@ if($action == 'notify') {
 		//$products = $product;
 		
 		//so we can see these products
-		echo "<h1>form</h1>";
+		echo "<h1>checkout</h1>";
 		echo "<p>".var_export($products, true)."</p>";
 		
 		//get button action
-		$action = $paypal->getButtonAction();
+		$formAction = $paypal->getButtonAction();
 		//get params for the form
 		$params = $paypal->getButtonParams($products, "$me?action=paid", "$me?action=cancel", "$me?action=notify");
 		
 		//create a form with these params
-		$ret = "<form action=\"$action\" method=\"post\">";
+		echo "<form action=\"$formAction\" method=\"post\">";
 		foreach($params as $key => $value) {
-			$ret .= "<input type=\"hidden\" name=\"$key\" value=\"$value\"/>";
+			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\"/>";
 		}
-		$ret .= "<button type=\"submit\">Checkout</button>";
-		$ret .= "</form>";
-		echo $ret;
+		echo "<button type=\"submit\">Checkout</button>";
+		echo "</form>";
+		
+		$subscription = new Paypal\Products\Subscription();
+		$subscription->id = 1;
+		$subscription->name = 'Magazine';
+		$subscription->amount = 100;
+		$subscription->duration = 1;
+		$subscription->units = Paypal\Products\Subscription::MONTHS;
+		$subscription->generateUsernameAndPassword = true;
+		$subscription->reattempt = true;
+		$subscription->recuring = true;
+		$subscription->trialAmount = 50;
+		$subscription->trialDuration = 2;
+		$subscription->trialUnits = Paypal\Products\Subscription::WEEKS;
+		
+		//so we can see these products
+		echo "<h1>subscribe</h1>";
+		echo "<p>".var_export($subscription, true)."</p>";
+		
+		//get params for the form
+		$subParams = $paypal->getButtonParams($subscription, "$me?action=paid", "$me?action=cancel", "$me?action=notify");
+		
+		//create a form with these params
+		echo "<form action=\"$formAction\" method=\"post\">";
+		foreach($subParams as $key => $value) {
+			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\"/>";
+		}
+		echo "<button type=\"submit\">Subscribe</button>";
+		echo "</form>";
 		
 		//refund form
 		echo "<h1>refund</h1>";
@@ -180,4 +183,3 @@ function printVars($vars) {
 	}
 	echo "</tbody></table>";
 }
-?>

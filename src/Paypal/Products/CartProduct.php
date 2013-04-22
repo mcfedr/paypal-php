@@ -71,24 +71,27 @@ class CartProduct extends Product {
 	 * @param Notification $info
 	 * @param string $number use when more than one product eg '1', '2'
 	 */
-	public function __construct($vars, $info, $number = '') {
-		parent::__construct($vars, $info, $number);
-		if(isset($vars["quantity$number"])) {
-			$this->quantity = $vars["quantity$number"];
-		}
-		if(isset($vars["mc_shipping$number"])) {
-			$this->shipppingTotal = $vars["mc_shipping$number"];
-		}
-		if(isset($vars["mc_handling$number"])) {
-			$this->handling = $vars["mc_handling$number"];
-		}
-		if(isset($vars["mc_gross_$number"])) {
-			$this->total = $vars["mc_gross_$number"];
-			$this->amount = $this->total - (empty($this->shippingTotal) ? 0 : $this->shippingTotal) - (empty($this->handling) ? 0 : $this->handling);
-		}
-		else if(isset($vars["mc_gross$number"])) {
-			$this->total = $vars["mc_gross$number"];
-			$this->amount = $this->total - (empty($this->shippingTotal) ? 0 : $this->shippingTotal) - (empty($this->handling) ? 0 : $this->handling);
+	public function __construct($vars = null, $number = '') {
+		parent::__construct($vars, $number);
+		
+		if(!is_null($vars)) {
+			if(isset($vars["quantity$number"])) {
+				$this->quantity = $vars["quantity$number"];
+			}
+			if(isset($vars["mc_shipping$number"])) {
+				$this->shipppingTotal = $vars["mc_shipping$number"];
+			}
+			if(isset($vars["mc_handling$number"])) {
+				$this->handling = $vars["mc_handling$number"];
+			}
+			if(isset($vars["mc_gross_$number"])) {
+				$this->total = $vars["mc_gross_$number"];
+				$this->amount = $this->total - (empty($this->shippingTotal) ? 0 : $this->shippingTotal) - (empty($this->handling) ? 0 : $this->handling);
+			}
+			else if(isset($vars["mc_gross$number"])) {
+				$this->total = $vars["mc_gross$number"];
+				$this->amount = $this->total - (empty($this->shippingTotal) ? 0 : $this->shippingTotal) - (empty($this->handling) ? 0 : $this->handling);
+			}
 		}
 	}
 	

@@ -86,34 +86,80 @@ class Subscription extends Product {
 	public $generateUsernameAndPassword = false;
 	
 	/**
+	 * The paypal id for this subscription
+	 * Set for notification
+	 * @var string
+	 */
+	public $subscriptionId;
+	
+	/**
+	 * The generated username
+	 * @var string
+	 */
+	public $username;
+	
+	/**
+	 * The generated password
+	 * @var string
+	 */
+	public $password;
+	
+	/**
 	 * Get a product from $vars
 	 * 
 	 * @param array $vars
 	 * @param Notification $info
 	 */
-	public function __construct($vars, $info) {
-		parent::__construct($vars, $info);
+	public function __construct($vars = null) {
+		parent::__construct($vars);
 		
-		if(isset($vars["mc_gross"])) {
-			$product->amount = $vars["mc_gross"];
-		}
-		else if(isset($vars['mc_amount3'])) {
-			$product->amount = $vars["mc_amount3"];
-		}
-		if(isset($vars['period3'])) {
-			$product->duration = $vars['period3'];
-		}
-		if(isset($vars['reattempt'])) {
-			$product->reattempt = $vars['reattempt'];
-		}
-		if(isset($vars['recur_times'])) {
-			$product->recurLimit = $vars['recur_times'];
-		}
-		if(isset($vars['recurring'])) {
-			$product->recuring = true;
-		}
-		else {
-			$product->recuring = false;
+		if(!is_null($vars)) {
+			if(isset($vars["subscr_id"])) {
+				$this->subscriptionId = $vars["subscr_id"];
+			}
+
+			if(isset($vars["mc_gross"])) {
+				$this->amount = $vars["mc_gross"];
+			}
+			else if(isset($vars['mc_amount3'])) {
+				$this->amount = $vars["mc_amount3"];
+			}
+			if(isset($vars['period3'])) {
+				$p = explode(' ', $vars['period3']);
+				$this->duration = $p[0];
+				$this->units = $p[1];
+			}
+
+			if(isset($vars['mc_amount1'])) {
+				$this->trialAmount = $vars["mc_amount1"];
+			}
+			if(isset($vars['period1'])) {
+				$p = explode(' ', $vars['period1']);
+				$this->trialDuration = $p[0];
+				$this->trialUnits = $p[1];
+			}
+
+			if(isset($vars['reattempt'])) {
+				$this->reattempt = true;
+			}
+			else {
+				$this->reattempt = false;
+			}
+			if(isset($vars['recur_times'])) {
+				$this->recurLimit = $vars['recur_times'];
+			}
+			if(isset($vars['recurring'])) {
+				$this->recuring = true;
+			}
+			else {
+				$this->recuring = false;
+			}
+
+			if(isset($vars['username']) && isset($vars['password'])) {
+				$this->username = $vars['username'];
+				$this->password = $vars['password'];
+				$this->generateUsernameAndPassword = true;
+			}
 		}
 	}
 	
@@ -122,7 +168,7 @@ class Subscription extends Product {
 	 * 
 	 * @param array $params
 	 */
-	public function setParams(&$params) {
+	public function setParams(&$params, $suffix = '') {
 		parent::setParams($params);
 		
 		$params['a3'] = $this->amount;

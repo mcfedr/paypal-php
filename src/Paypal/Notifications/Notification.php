@@ -44,9 +44,28 @@ abstract class Notification {
 	
 	/**
 	 * Type of transaction (paypal)
+	 * @see TXT_CART
+	 * @see TXT_WEB_ACCEPT
+	 * @see TXT_MASSPAY
+	 * @see TXT_SUBSCRIPTION_START
+	 * @see TXT_SUBSCRIPTION_PAYMENT
+	 * @see TXT_SUBSCRIPTION_MODIFY
+	 * @see TXT_SUBSCRIPTION_FAILED
+	 * @see TXT_SUBSCRIPTION_EXPIRE
+	 * @see TXT_SUBSCRIPTION_CANCEL
 	 * @var string 
 	 */
 	public $transactionType;
+	
+	const TXT_CART = 'cart';
+	const TXT_WEB_ACCEPT = 'web_accept';
+	const TXT_MASSPAY = 'masspay';
+	const TXT_SUBSCRIPTION_START = 'subscr_signup';
+	const TXT_SUBSCRIPTION_PAYMENT = 'subscr_payment';
+	const TXT_SUBSCRIPTION_MODIFY = 'subscr_modify';
+	const TXT_SUBSCRIPTION_FAILED = 'subscr_failed';
+	const TXT_SUBSCRIPTION_EXPIRE = 'subscr_eot';
+	const TXT_SUBSCRIPTION_CANCEL = 'subscr_cancel';
 	
 	/**
 	 * Paypals id for this transaction
@@ -182,6 +201,9 @@ abstract class Notification {
 		if(isset($vars['payment_date'])) {
 			$this->date = new \DateTime($vars['payment_date']);
 		}
+		else if(isset($vars['subscr_date'])) {
+			$this->date = new \DateTime($vars['subscr_date']);
+		}
 		
 		$this->resent = isset($vars['resend']) && $vars['resend'] == 'true';
 		$this->sandbox = isset($vars['test_ipn']) && $vars['test_ipn'] == 1;
@@ -192,9 +214,10 @@ abstract class Notification {
 	 * 
 	 * @param \Paypal\Authenticaton $authentication
 	 * @param \Paypal\Settings $settings
+	 * @throws \Paypal\Exceptions\NotificationInvalidException
 	 * @return bool
 	 */
-	public function isOK(\Paypal\Authenticaton $authentication, \Paypal\Settings $settings) {
+	public function isOK(\Paypal\Authentication $authentication, \Paypal\Settings $settings) {
 		return $this->isBusinessCorrect($authentication) && $this->isCurrencyCorrect($settings);
 	}
 	
@@ -202,19 +225,27 @@ abstract class Notification {
 	 * Check that the notification matches the expected business
 	 * 
 	 * @param \Paypal\Authenticaton $authentication
+	 * @throws \Paypal\Exceptions\NotificationBusinessInvalidException
 	 * @return bool
 	 */
-	private function isBusinessCorrect(\Paypal\Authenticaton $authentication) {
-		return $this->business == $authentication->getEmail() && $this->sandbox == $authentication->isSandbox();
+	private function isBusinessCorrect(\Paypal\Authentication $authentication) {
+		if($this->business != $authentication->getEmail() || $this->sandbox != $authentication->isSandbox()) {
+			throw new \Paypal\Exceptions\NotificationBusinessInvalidException($this);
+		}
+		return true;
 	}
 	
 	/**
 	 * Check the correct currency was used
 	 * 
 	 * @param \Paypal\Settings $setting
+	 * @throws \Paypal\Exceptions\NotificationCurrencyInvalidException
 	 * @return bool
 	 */
 	private function isCurrencyCorrect(\Paypal\Settings $settings) {
-		return $this->currency == $settings->currency;
+		if($this->currency != $settings->currency) {
+			throw new \Paypal\Exceptions\NotificationCurrencyInvalidException($this, $this->currency, $settings->currency);
+		}
+		return true;
 	}
 }

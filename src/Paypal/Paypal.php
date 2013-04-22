@@ -22,9 +22,6 @@
  */
 namespace Paypal;
 
-use Paypal\Notifications;
-use Paypal\Products;
-
 /**
  * This class is used for generation of buttons and handling of paypal responses
  */
@@ -175,39 +172,43 @@ class Paypal {
 			$vars = $_REQUEST;
 		}
 		$handled = false;
-		if($this->verifyNotification($vars)) {
-			if(isset($vars['txn_type'])) {
-				switch($vars['txn_type']) {
-					case 'cart':
-					case 'web_accept':
-						$handled = new Notifications\CartNotification($vars);
-						break;
-					case 'masspay':
-						$handled = new Notifications\MasspayNotification($vars);
-						break;
-					case 'subscr_cancel':
-					case 'subscr_eot':
-					case 'subscr_failed':
-					case 'subscr_modify':
-					case 'subscr_payment':
-					case 'subscr_signup':
-						$handled = new Notifications\SubscriptionNotification($vars);
-						break;
-				}
-			}
-			else if(isset($vars['payment_status'])) {
-				switch($vars['payment_status']) {
-					case 'Refunded':
-					case 'Reversed':
-					case 'Canceled_Reversal':
-						$handled = new Notifications\CartChangeNotification($vars);
-						break;
-				}
-			}
+		
+        if(isset($vars['txn_type'])) {
+            switch($vars['txn_type']) {
+                case Notifications\Notification::TXT_CART:
+                case Notifications\Notification::TXT_WEB_ACCEPT:
+                    $handled = new Notifications\CartNotification($vars);
+                    break;
+                case Notifications\Notification::TXT_MASSPAY:
+                    $handled = new Notifications\MasspayNotification($vars);
+                    break;
+                case Notifications\Notification::TXT_SUBSCRIPTION_CANCEL:
+                case Notifications\Notification::TXT_SUBSCRIPTION_EXPIRE:
+                case Notifications\Notification::TXT_SUBSCRIPTION_FAILED:
+                case Notifications\Notification::TXT_SUBSCRIPTION_MODIFY:
+                case Notifications\Notification::TXT_SUBSCRIPTION_PAYMENT:
+                case Notifications\Notification::TXT_SUBSCRIPTION_START:
+                    $handled = new Notifications\SubscriptionNotification($vars);
+                    break;
+            }
+        }
+        else if(isset($vars['payment_status'])) {
+            switch($vars['payment_status']) {
+                case 'Refunded':
+                case 'Reversed':
+                case 'Canceled_Reversal':
+                    $handled = new Notifications\CartChangeNotification($vars);
+                    break;
+            }
 		}
+        
 		if(!$handled) {
 			return false;
 		}
+        
+        if(!$this->verifyNotification($vars)) {
+            return false;
+        }
 		
 		if(!$handled->isOK($this->authentication, $this->settings)) {
 			throw new Exceptions\NotificationInvalidException($handled);
@@ -378,14 +379,14 @@ class Paypal {
 		else {
 			$url = 'https://www.paypal.com/cgi-bin/webscr';
 		}
-		$data = http_build_query(array_merge(array('cmd=_notify-validat', $vars)));
+		$data = http_build_query(array_merge(array('cmd' => '_notify-validate'), $vars));
 		$response = $this->makeRequest($url, $data);
 		if($response === false) {
 			return false;
 		}
 		$verified = $response == 'VERIFIED';
 		if(!$verified) {
-			throw new Excetions\NotificationException($response);
+			throw new Exceptions\NotificationVerifiationException($response);
 		}
 		return $verified;
 	}

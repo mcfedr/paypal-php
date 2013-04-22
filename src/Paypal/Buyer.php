@@ -49,6 +49,13 @@ class Buyer {
 	public $status;
 	
 	/**
+	 * Code of country of residence
+	 * @var string 
+	 */
+	public $residenceCountry;
+
+
+	/**
 	 * Country
 	 * @var string
 	 */
@@ -121,6 +128,9 @@ class Buyer {
 		}
 		if(isset($vars['payer_status'])) {
 			$this->status = $vars['payer_status'];
+		}
+		if(isset($vars['residence_country'])) {
+			$this->residenceCountry = $vars['residence_country'];
 		}
 		if(isset($vars['address_country'])) {
 			$this->addressCountry = $vars['address_country'];
