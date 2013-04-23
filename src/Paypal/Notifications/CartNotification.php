@@ -24,7 +24,7 @@ class CartNotification extends PaymentNotification {
 	
 	public function __construct($vars) {
 		parent::__construct($vars);
-		$this->type = PaypalCartNotification::CART;
+		$this->type = static::CART;
 		
 		if(isset($vars['mc_handling'])) {
 			$this->handling = $vars['mc_handling'];

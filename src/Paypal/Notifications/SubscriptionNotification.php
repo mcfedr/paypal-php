@@ -13,6 +13,7 @@ class SubscriptionNotification extends PaymentNotification {
 	
 	public function __construct($vars) {
 		parent::__construct($vars);
+		$this->type = static::SUBSCRIPTION;
 		
 		if(isset($vars['mc_gross'])) {
 			$this->total = $vars['mc_gross'];
