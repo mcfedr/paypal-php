@@ -12,6 +12,8 @@ A simple SDK for dealing with the Paypal API from PHP.
   * Handles verification with paypal
   * All types of payment notifcations
   * Subscription related notifcations
+* Mass Payments
+  * Instantly send money to other paypal users
 * Modern PHP5 features
   * Namespaced
   * Autoloading
@@ -40,3 +42,13 @@ Alternatively just run [`apigen`](http://apigen.org/) once you have cloned the r
 ### Standard
 
 The other choice is to checkout the code, and register it with your autoloader. If you need one [ClassLoader](https://github.com/symfony/ClassLoader) is the place to start.
+
+## Contributing
+
+Please feel free to post issues, or even better pull requests right here on github.
+
+It would be great to flesh out the functionality to cover the other parts of paypal api.
+
+## License
+
+The library is covered by the GPL v3 or higher. There is a copy in the repo.
