@@ -81,6 +81,15 @@ class Settings {
 	public $logNotifications = false;
 	
 	/**
+	* Create a settings object
+	*
+	* @param string $currency
+	*/
+	public function __construct($currency = 'GBP') {
+		$this->currency = $currency;
+	}
+	
+	/**
 	 * Sets up the array with the vars for the settings
 	 * 
 	 * @param array $params 
