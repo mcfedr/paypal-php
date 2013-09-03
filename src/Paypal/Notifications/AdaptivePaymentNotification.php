@@ -3,7 +3,7 @@
 namespace Paypal\Notifications;
 
 class AdaptivePaymentNotification extends PaymentNotification {
-    
+
     /**
      * Status of Payment
      * @var string
@@ -17,7 +17,7 @@ class AdaptivePaymentNotification extends PaymentNotification {
      * PENDING – The payment is awaiting processing
      */
     public $status;
-    
+
     /**
      * Whether the Pay API is used with or without the SetPaymentOptions and ExecutePayment API operations. Possible values are:
      * PAY – If you are not using the SetPaymentOptions and ExecutePayment API operations
@@ -25,7 +25,7 @@ class AdaptivePaymentNotification extends PaymentNotification {
      * @var string 
      */
     public $actionType;
-    
+
     /**
      * Whether the payment request specified to reverse parallel payments if an error occurs. Possible values are:
      * true – Each parallel payment is reversed if an error occurs
@@ -43,7 +43,7 @@ class AdaptivePaymentNotification extends PaymentNotification {
      * @var string
      */
     public $payKey;
-    
+
     /**
      * The payer of PayPal fees. Possible values are:
      * SENDER – Sender pays all fees (for personal, implicit simple/parallel payments; do not use for chained or unilateral payments)
@@ -53,14 +53,14 @@ class AdaptivePaymentNotification extends PaymentNotification {
      * @var string
      */
     public $feesPayer;
-    
+
     /**
      * The preapproval key returned after a PreapprovalRequest,
      * or the preapproval key that identifies the preapproval key sent with a PayRequest.
      * @var string
      */
     public $preapprovalKey;
-    
+
     /**
      * Whether this transaction is a chargeback, partial, or reversal. Possible values are:
      * Chargeback Settlement – Transaction is a chargeback
@@ -69,7 +69,7 @@ class AdaptivePaymentNotification extends PaymentNotification {
      * @var string
      */
     public $reasonCode;
-    
+
     /**
      * The tracking ID that was specified for this payment in the PaymentDetailsRequest message.
      * @var string
@@ -79,43 +79,68 @@ class AdaptivePaymentNotification extends PaymentNotification {
     public function __construct($vars) {
         parent::__construct($vars);
         $this->type = static::ADAPTIVE;
-        
+
         if (isset($vars['transaction_type'])) {
             $this->transactionType = $vars['transaction_type'];
         }
-        
+
         if (isset($vars['status'])) {
             $this->status = $vars['status'];
         }
-        
+
         if (isset($vars['payment_request_date'])) {
             $this->date = new \DateTime($vars['payment_request_date']);
         }
-        
+
         if (isset($vars['action_type'])) {
             $this->actionType = $vars['action_type'];
         }
-        
+
         if (isset($vars['pay_key'])) {
             $this->payKey = $vars['pay_key'];
         }
-        
+
         if (isset($vars['fees_payer'])) {
             $this->feesPayer = $vars['fees_payer'];
         }
-        
+
         if (isset($vars['trackingId'])) {
             $this->invoiceId = $vars['trackingId'];
         }
-        
+
         if (isset($vars['preapproval_key'])) {
             $this->preapprovalKey = $vars['preapproval_key'];
         }
-        
+
         if (isset($vars['reason_code'])) {
             $this->reasonCode = $vars['reason_code'];
         }
-        
+
         $this->reverseAllParallelPaymentsOnError = isset($vars['reverse_all_parallel_payments_on_error']) && $vars['reverse_all_parallel_payments_on_error'] == 'true';
+    }
+
+    /**
+     * Check that the notification matches the expected business
+     * 
+     * @param \Paypal\Authenticaton $authentication
+     * @throws \Paypal\Exceptions\NotificationBusinessInvalidException
+     * @return bool
+     */
+    protected function isBusinessCorrect(\Paypal\Authentication $authentication) {
+        if ($this->sandbox != $authentication->isSandbox()) {
+            throw new \Paypal\Exceptions\NotificationBusinessInvalidException($this);
+        }
+        return true;
+    }
+
+    /**
+     * Check the correct currency was used
+     * 
+     * @param \Paypal\Settings $setting
+     * @throws \Paypal\Exceptions\NotificationCurrencyInvalidException
+     * @return bool
+     */
+    protected function isCurrencyCorrect(\Paypal\Settings $settings) {
+        return true;
     }
 }

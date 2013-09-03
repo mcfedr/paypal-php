@@ -233,7 +233,7 @@ abstract class Notification {
      * @throws \Paypal\Exceptions\NotificationBusinessInvalidException
      * @return bool
      */
-    private function isBusinessCorrect(\Paypal\Authentication $authentication) {
+    protected function isBusinessCorrect(\Paypal\Authentication $authentication) {
         if ($this->business != $authentication->getEmail() || $this->sandbox != $authentication->isSandbox()) {
             throw new \Paypal\Exceptions\NotificationBusinessInvalidException($this);
         }
@@ -247,7 +247,7 @@ abstract class Notification {
      * @throws \Paypal\Exceptions\NotificationCurrencyInvalidException
      * @return bool
      */
-    private function isCurrencyCorrect(\Paypal\Settings $settings) {
+    protected function isCurrencyCorrect(\Paypal\Settings $settings) {
         if ($this->currency != $settings->currency) {
             throw new \Paypal\Exceptions\NotificationCurrencyInvalidException($this, $this->currency, $settings->currency);
         }
