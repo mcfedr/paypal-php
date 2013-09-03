@@ -35,7 +35,7 @@ Alternatively just run [`apigen`](http://apigen.org/) once you have cloned the r
 
 	{
 	    "require": {
-	        "mcfedr/paypal": "2.0.*"
+	        "mcfedr/paypal": "~2.0.3"
 	    }
 	}
 
