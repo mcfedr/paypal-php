@@ -27,6 +27,10 @@ class SubscriptionNotification extends PaymentNotification {
         else {
             $has = false;
         }
+        
+        if (isset($vars['subscr_date'])) {
+            $this->date = new \DateTime($vars['subscr_date']);
+        }
 
         if ($has) {
             $this->amount = $this->total;

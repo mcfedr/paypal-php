@@ -111,48 +111,66 @@ class Buyer {
         if (isset($vars['payer_id'])) {
             $this->id = $vars['payer_id'];
         }
+
         if (isset($vars['first_name'])) {
             $this->firstName = $vars['first_name'];
         }
+
         if (isset($vars['last_name'])) {
             $this->lastName = $vars['last_name'];
         }
+
         if (isset($vars['payer_email'])) {
             $this->email = $vars['payer_email'];
         }
+        else if (isset($vars['sender_email'])) {
+            $this->email = $vars['sender_email'];
+        }
+
         if (isset($vars['payer_business_name'])) {
             $this->business = $vars['payer_business_name'];
         }
+
         if (isset($vars['contact_phone'])) {
             $this->phone = $vars['contact_phone'];
         }
+
         if (isset($vars['payer_status'])) {
             $this->status = $vars['payer_status'];
         }
+
         if (isset($vars['residence_country'])) {
             $this->residenceCountry = $vars['residence_country'];
         }
+
         if (isset($vars['address_country'])) {
             $this->addressCountry = $vars['address_country'];
         }
+
         if (isset($vars['address_country_code'])) {
             $this->addressCountryCode = $vars['address_country_code'];
         }
+
         if (isset($vars['address_zip'])) {
             $this->addressZip = $vars['address_zip'];
         }
+
         if (isset($vars['address_state'])) {
             $this->addressState = $vars['address_state'];
         }
+
         if (isset($vars['address_city'])) {
             $this->addressCity = $vars['address_city'];
         }
+
         if (isset($vars['address_street'])) {
             $this->addressStreet = $vars['address_street'];
         }
+
         if (isset($vars['address_name'])) {
             $this->addressName = $vars['address_name'];
         }
+
         if (isset($vars['address_status'])) {
             $this->addressStatus = $vars['address_status'];
         }

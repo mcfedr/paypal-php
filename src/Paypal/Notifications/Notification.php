@@ -14,6 +14,7 @@ abstract class Notification {
      * @see CART
      * @see MASSPAY
      * @see SUBSCRIPTION
+     * @see ADAPTIVE
      * @var string
      */
     public $type;
@@ -42,6 +43,8 @@ abstract class Notification {
      * type for subscription notifications
      */
     const SUBSCRIPTION = 'subscription';
+    
+    const ADAPTIVE = 'adaptive';
 
     /**
      * Type of transaction (paypal)
@@ -54,6 +57,8 @@ abstract class Notification {
      * @see TXT_SUBSCRIPTION_FAILED
      * @see TXT_SUBSCRIPTION_EXPIRE
      * @see TXT_SUBSCRIPTION_CANCEL
+     * @see TXT_ADAPTIVE_CREATE
+     * @see TXT_ADAPTIVE_ADJUSTMENT
      * @var string 
      */
     public $transactionType;
@@ -67,6 +72,8 @@ abstract class Notification {
     const TXT_SUBSCRIPTION_FAILED = 'subscr_failed';
     const TXT_SUBSCRIPTION_EXPIRE = 'subscr_eot';
     const TXT_SUBSCRIPTION_CANCEL = 'subscr_cancel';
+    const TXT_ADAPTIVE_CREATE = 'Adaptive Payment PAY';
+    const TXT_ADAPTIVE_ADJUSTMENT = 'Adjustment';
 
     /**
      * Paypals id for this transaction
@@ -201,9 +208,6 @@ abstract class Notification {
 
         if (isset($vars['payment_date'])) {
             $this->date = new \DateTime($vars['payment_date']);
-        }
-        else if (isset($vars['subscr_date'])) {
-            $this->date = new \DateTime($vars['subscr_date']);
         }
 
         $this->resent = isset($vars['resend']) && $vars['resend'] == 'true';

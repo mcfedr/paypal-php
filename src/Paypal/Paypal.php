@@ -203,6 +203,14 @@ class Paypal {
                     break;
             }
         }
+        else if (isset($vars['transaction_type'])) {
+            switch($vars['transaction_type']) {
+                case Notifications\Notification::TXT_ADAPTIVE_CREATE:
+                case Notifications\Notification::TXT_ADAPTIVE_ADJUSTMENT:
+                    $handled = new Notifications\AdaptivePaymentNotification($vars);
+                    break;
+            }
+        }
 
         if (!$handled) {
             return false;
