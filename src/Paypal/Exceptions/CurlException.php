@@ -2,6 +2,9 @@
 
 namespace Paypal\Exceptions;
 
+/**
+ * A curl problem
+ */
 class CurlException extends Exception {
 
     private $url;

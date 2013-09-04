@@ -216,7 +216,7 @@ class Paypal {
             return false;
         }
 
-        if (!$this->verifyNotification($vars)) {
+        if (!$this->verifyNotification($handled, $vars)) {
             return false;
         }
 
@@ -383,9 +383,11 @@ class Paypal {
      * 
      * @throws Excetions\NotificationException
      * @throws Exceptions\CurlException
+     * @param Notifications\Notification $notication
+     * @param array $vars
      * @return bool
      */
-    private function verifyNotification($vars) {
+    private function verifyNotification($notification, $vars) {
         if ($this->authentication->isSandbox()) {
             $url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
         }
@@ -399,7 +401,7 @@ class Paypal {
         }
         $verified = $response == 'VERIFIED';
         if (!$verified) {
-            throw new Exceptions\NotificationVerifiationException($response);
+            throw new Exceptions\NotificationVerifiationException($response, $notification);
         }
         return $verified;
     }
