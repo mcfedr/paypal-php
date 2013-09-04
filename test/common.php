@@ -1,9 +1,6 @@
 <?php
 
-require 'UniversalClassLoader.php';
-$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
-$loader->registerNamespaces(array('Paypal' => __DIR__ . '/../src'));
-$loader->register();
+require '../vendor/autoload.php';
 
 function paypal() {
 	//Create the authentication
