@@ -35,7 +35,7 @@ Alternatively just run [`apigen`](http://apigen.org/) once you have cloned the r
 
 	{
 	    "require": {
-	        "mcfedr/paypal": "~2.0.3"
+	        "mcfedr/paypal": "~2.1.2"
 	    }
 	}
 
@@ -48,6 +48,9 @@ The other choice is to checkout the code, and register it with your autoloader. 
 Please feel free to post issues, or even better pull requests right here on github.
 
 It would be great to flesh out the functionality to cover the other parts of paypal api.
+
+Note that recently paypal have started providing much more themselves - [PayPal on GitHub](https://github.com/paypal).
+Although a good IPN lib is still missing.
 
 ## License
 
