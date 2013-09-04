@@ -1,3 +1,4 @@
 *.DS_Store
 /docs
 /nbproject/private/
+/vendor/
