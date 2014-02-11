@@ -54,4 +54,4 @@ Although a good IPN lib is still missing.
 
 ## License
 
-The library is covered by the GPL v3 or higher. There is a copy in the repo.
+The library is covered by the MIT license. There is a copy in the repo.
