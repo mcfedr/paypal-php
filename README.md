@@ -2,6 +2,9 @@
 
 A simple SDK for dealing with the Paypal API from PHP.
 
+[![Latest Stable Version](https://poser.pugx.org/mcfedr/paypal/v/stable.png)](https://packagist.org/packages/mcfedr/paypal)
+[![License](https://poser.pugx.org/mcfedr/paypal/license.png)](https://packagist.org/packages/mcfedr/paypal)
+
 ## Features
 
 * Generate button code
