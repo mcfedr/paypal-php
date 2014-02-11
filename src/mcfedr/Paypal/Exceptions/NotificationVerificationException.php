@@ -1,15 +1,15 @@
 <?php
 
-namespace Paypal\Exceptions;
+namespace mcfedr\Paypal\Exceptions;
 
-class NotificationVerifiationException extends NotificationInvalidException {
+class NotificationVerificationException extends NotificationInvalidException {
 
     private $response;
 
     /**
-     * 
+     *
      * @param string $response
-     * @param \Paypal\Notifications\Notification $notication
+     * @param \mcfedr\Paypal\Notifications\Notification $notification
      */
     public function __construct($response, $notification) {
         $this->response = $response;
@@ -17,7 +17,7 @@ class NotificationVerifiationException extends NotificationInvalidException {
         parent::__construct("Verification failed");
     }
 
-    public function getResonse() {
+    public function getResponse() {
         return $this->response;
     }
 

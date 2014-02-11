@@ -1,6 +1,8 @@
 <?php
 
-namespace Paypal\Notifications;
+namespace mcfedr\Paypal\Notifications;
+
+use mcfedr\Paypal\Products\CartProduct;
 
 class CartNotification extends PaymentNotification {
 
@@ -19,7 +21,7 @@ class CartNotification extends PaymentNotification {
     /**
      * The products purchased in this transaction
      * Can be used to check the right amounts where paid and the cart is what you expected
-     * @var array {@link Paypal\Products\CartProduct}
+     * @var array {@link mcfedr\Paypal\Products\CartProduct}
      */
     public $products;
 
@@ -45,10 +47,10 @@ class CartNotification extends PaymentNotification {
 
         $this->products = array();
         for ($i = 1; isset($vars["item_name$i"]); $i++) {
-            $this->products[] = new \Paypal\Products\CartProduct($vars, $i);
+            $this->products[] = new CartProduct($vars, $i);
         }
         if (isset($vars['item_name'])) {
-            $this->products[] = new \Paypal\Products\CartProduct($vars);
+            $this->products[] = new CartProduct($vars);
         }
         return $this;
     }

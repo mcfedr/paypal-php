@@ -22,7 +22,9 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU GENERAL PUBLIC LICENSE
  */
 
-namespace Paypal;
+namespace mcfedr\Paypal;
+
+use mcfedr\Paypal\Exceptions\UnsupportedRefundException;
 
 /**
  * This class is used for generation of buttons and handling of paypal responses
@@ -66,7 +68,7 @@ class Paypal {
      * @param int $invoiceId Your id for this payment, must be unique
      * @param string $custom Custom data that will be in any notifications
      * @param Buyer $buyer Info about the buyer to autofill in
-     * @param string label Label for the button
+     * @param string $label Label for the button
      * @return string html form with a button
      */
     public function getButton($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null, Buyer $buyer = null, $label = "Checkout") {
@@ -164,10 +166,10 @@ class Paypal {
      * And success url to use payment data transfer (PDT)
 
      * @throws Exceptions\CurlException
-     * @throws Exceptions\NotificationVerifiationException
+     * @throws Exceptions\NotificationVerificationException
      * @throws Exceptions\NotificationInvalidException
      * @param array $vars variables to use, normally $_POST
-     * @return Notification
+     * @return Notifications\Notification
      */
     public function handleNotification($vars = null) {
         if (is_null($vars)) {
@@ -182,7 +184,7 @@ class Paypal {
                     $handled = new Notifications\CartNotification($vars);
                     break;
                 case Notifications\Notification::TXT_MASSPAY:
-                    $handled = new Notifications\MasspayNotification($vars);
+                    $handled = new Notifications\MasspayNotifications($vars);
                     break;
                 case Notifications\Notification::TXT_SUBSCRIPTION_CANCEL:
                 case Notifications\Notification::TXT_SUBSCRIPTION_EXPIRE:
@@ -220,9 +222,8 @@ class Paypal {
             return false;
         }
 
-        if (!$handled->isOK($this->authentication, $this->settings)) {
-            throw new Exceptions\NotificationInvalidException($handled);
-        }
+        //Check if it is ok, if not an exception will be thrown
+        $handled->isOK($this->authentication, $this->settings);
 
         if ($this->settings->logNotifications === true) {
             error_log('paypal notification ' . http_build_query($vars));
@@ -319,19 +320,23 @@ class Paypal {
 
     /**
      * Refund the payment
-     * 
-     * @throws Exceptions\RefundException
-     * @throws Exceptions\CurlException
+     *
+     *
      * @param string $transactionId id
      * @param string $invoiceId optional internal payment id
      * @param string $type currently only Full is supported
+     * @throws Exceptions\RefundException
+     * @throws Exceptions\UnsupportedRefundException
      * @return bool successful
      */
     public function refundPayment($transactionId, $invoiceId = null, $type = 'Full') {
         $params = array();
         $params['TRANSACTIONID'] = $transactionId;
         $params['INVOICEID'] = $invoiceId;
-        $params['REFUNDTYPE'] = 'Full';
+        if($type != 'Full') {
+            throw new UnsupportedRefundException($type);
+        }
+        $params['REFUNDTYPE'] = $type;
         $response = $this->callPaypalNVP('RefundTransaction', $params);
         if ($response !== false) {
             if ($response['ACK'] == 'Success') {
@@ -364,7 +369,7 @@ class Paypal {
         }
         $headerParams['USER'] = $this->authentication->getUsername();
         $headerParams['PWD'] = $this->authentication->getPassword();
-        $headerParams['SIGNATURE'] = $this->authentication->getSigniture();
+        $headerParams['SIGNATURE'] = $this->authentication->getSignature();
         $headerParams['VERSION'] = '71.0';
 
         $data = http_build_query(array_merge(array('METHOD' => $method), $headerParams, $params));
@@ -380,11 +385,11 @@ class Paypal {
 
     /**
      * Verify paypal notification
-     * 
-     * @throws Excetions\NotificationException
-     * @throws Exceptions\CurlException
-     * @param Notifications\Notification $notication
+     *
+     *
+     * @param \mcfedr\Paypal\Notifications\Notification $notification
      * @param array $vars
+     * @throws Exceptions\NotificationVerificationException
      * @return bool
      */
     private function verifyNotification($notification, $vars) {
@@ -401,13 +406,13 @@ class Paypal {
         }
         $verified = $response == 'VERIFIED';
         if (!$verified) {
-            throw new Exceptions\NotificationVerifiationException($response, $notification);
+            throw new Exceptions\NotificationVerificationException($response, $notification);
         }
         return $verified;
     }
 
     /**
-     * Makes a request using curl, basicaly sets some curl options
+     * Makes a request using curl, basically sets some curl options
      * 
      * @throws Exceptions\CurlException
      * @param string $url

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal\Products;
+namespace mcfedr\Paypal\Products;
 
 /**
  * Describes a product to be sold
@@ -37,9 +37,8 @@ abstract class Product {
 
     /**
      * Get a product from $vars
-     * 
+     *
      * @param array $vars
-     * @param Notification $info
      * @param string $number use when more than one product eg '1', '2'
      */
     public function __construct($vars = null, $number = '') {
@@ -61,8 +60,9 @@ abstract class Product {
 
     /**
      * Sets up the array with paypal vars for $product
-     * 
+     *
      * @param array $params
+     * @param string $suffix
      */
     public function setParams(&$params, $suffix = '') {
         if (!empty($this->id)) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal\Exceptions;
+namespace mcfedr\Paypal\Exceptions;
 
 /**
  * A curl problem
@@ -11,6 +11,11 @@ class CurlException extends Exception {
     private $data;
     private $curlMessage;
 
+    /**
+     * @param resource $ch a cURL handle
+     * @param string $url
+     * @param string $data
+     */
     public function __construct($ch, $url, $data) {
         $this->url = $url;
         $this->data = $data;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal;
+namespace mcfedr\Paypal;
 
 /**
  * Class with read only vars for using paypal api's
@@ -10,14 +10,14 @@ class Authentication {
     private $email;
     private $username;
     private $password;
-    private $signiture;
+    private $signature;
     private $sandbox;
 
-    public function __construct($email, $username, $password, $signiture, $sandbox = false) {
+    public function __construct($email, $username, $password, $signature, $sandbox = false) {
         $this->email = $email;
         $this->username = $username;
         $this->password = $password;
-        $this->signiture = $signiture;
+        $this->signature = $signature;
         $this->sandbox = $sandbox;
     }
 
@@ -33,8 +33,8 @@ class Authentication {
         return $this->password;
     }
 
-    public function getSigniture() {
-        return $this->signiture;
+    public function getSignature() {
+        return $this->signature;
     }
 
     public function isSandbox() {

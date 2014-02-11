@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal;
+namespace mcfedr\Paypal;
 
 /**
  * Settings used in paypal transactions
@@ -77,17 +77,17 @@ class Settings {
 	public $weightUnit = null;
 
 	/**
-	 * Cause all notifations to be logged to stderr
-	 * @var bool|\MonoLog\Logger
+	 * Cause all notifications to be logged to stderr
+	 * @var bool|\Psr\Log\LoggerInterface
 	 */
 	public $logNotifications = false;
 
-	/**
-	 * Create a settings object
-	 *
-	 * @param string $currency
-	 * @param bool|\MonoLog\Logger
-	 */
+    /**
+     * Create a settings object
+     *
+     * @param string $currency
+     * @param bool|\Psr\Log\LoggerInterface $logging
+     */
 	public function __construct($currency = 'GBP', $logging = false) {
 		$this->currency = $currency;
 		$this->logNotifications = $logging;

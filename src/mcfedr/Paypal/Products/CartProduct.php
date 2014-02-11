@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal\Products;
+namespace mcfedr\Paypal\Products;
 
 /**
  * Describes a product to be sold
@@ -40,13 +40,13 @@ class CartProduct extends Product {
     public $shipping;
 
     /**
-     * cost of shipping futher items 
+     * cost of shipping further items
      * @var double
      */
     public $shipping2;
 
     /**
-     * weight of this item if your accout is setup to use weight base shipping
+     * weight of this item if your account is setup to use weight base shipping
      * @var double
      */
     public $weight;
@@ -63,13 +63,12 @@ class CartProduct extends Product {
      * Set when received by notification
      * @var double
      */
-    public $shipppingTotal;
+    public $shippingTotal;
 
     /**
      * Get a product from $vars
-     * 
+     *
      * @param array $vars
-     * @param Notification $info
      * @param string $number use when more than one product eg '1', '2'
      */
     public function __construct($vars = null, $number = '') {
@@ -80,7 +79,7 @@ class CartProduct extends Product {
                 $this->quantity = $vars["quantity$number"];
             }
             if (isset($vars["mc_shipping$number"])) {
-                $this->shipppingTotal = $vars["mc_shipping$number"];
+                $this->shippingTotal = $vars["mc_shipping$number"];
             }
             if (isset($vars["mc_handling$number"])) {
                 $this->handling = $vars["mc_handling$number"];
@@ -98,8 +97,7 @@ class CartProduct extends Product {
 
     /**
      * Sets up the array with paypal vars for $product
-     * 
-     * @param PaypalProduct $product
+     *
      * @param array $params
      * @param string $suffix used when more than one product is set eg "_1", "_2"
      */

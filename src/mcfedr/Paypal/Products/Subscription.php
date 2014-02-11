@@ -1,9 +1,9 @@
 <?php
 
-namespace Paypal\Products;
+namespace mcfedr\Paypal\Products;
 
 /**
- * Describes a recuring product
+ * Describes a recurring product
  */
 class Subscription extends Product {
 
@@ -51,10 +51,10 @@ class Subscription extends Product {
     public $trialUnits;
 
     /**
-     * Is this a recuring subscription
+     * Is this a recurring subscription
      * @var bool
      */
-    public $recuring = true;
+    public $recurring = true;
 
     /**
      * Number of times to recur
@@ -76,7 +76,7 @@ class Subscription extends Product {
 
     /**
      * Can the user modify their existing subscription with this button
-     * @var type 
+     * @var bool
      */
     public $allowModify = false;
 
@@ -107,9 +107,8 @@ class Subscription extends Product {
 
     /**
      * Get a product from $vars
-     * 
+     *
      * @param array $vars
-     * @param Notification $info
      */
     public function __construct($vars = null) {
         parent::__construct($vars);
@@ -150,10 +149,10 @@ class Subscription extends Product {
                 $this->recurLimit = $vars['recur_times'];
             }
             if (isset($vars['recurring'])) {
-                $this->recuring = true;
+                $this->recurring = true;
             }
             else {
-                $this->recuring = false;
+                $this->recurring = false;
             }
 
             if (isset($vars['username']) && isset($vars['password'])) {
@@ -166,8 +165,9 @@ class Subscription extends Product {
 
     /**
      * Sets up the array with paypal vars for $product
-     * 
+     *
      * @param array $params
+     * @param string $suffix
      */
     public function setParams(&$params, $suffix = '') {
         parent::setParams($params);
@@ -192,7 +192,7 @@ class Subscription extends Product {
             }
         }
 
-        if ($this->recuring) {
+        if ($this->recurring) {
             $params['src'] = 1;
             if (!empty($this->recurLimit)) {
                 $params['srt'] = $this->recurLimit;

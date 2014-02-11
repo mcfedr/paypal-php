@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal\Exceptions;
+namespace mcfedr\Paypal\Exceptions;
 
 /**
  * Paypal indicates a problem with an api call
@@ -19,11 +19,11 @@ abstract class ACKException extends Exception {
     }
 
     /**
-     * The comlete response
+     * The complete response
      * 
      * @return array
      */
-    public function getResonse() {
+    public function getResponse() {
         return $this->response;
     }
 

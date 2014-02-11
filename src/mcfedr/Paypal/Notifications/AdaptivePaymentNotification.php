@@ -1,6 +1,10 @@
 <?php
 
-namespace Paypal\Notifications;
+namespace mcfedr\Paypal\Notifications;
+
+use mcfedr\Paypal\Authentication;
+use mcfedr\Paypal\Exceptions\NotificationBusinessInvalidException;
+use mcfedr\Paypal\Settings;
 
 class AdaptivePaymentNotification extends PaymentNotification {
 
@@ -121,26 +125,25 @@ class AdaptivePaymentNotification extends PaymentNotification {
 
     /**
      * Check that the notification matches the expected business
-     * 
-     * @param \Paypal\Authenticaton $authentication
-     * @throws \Paypal\Exceptions\NotificationBusinessInvalidException
+     *
+     * @param Authentication $authentication
+     * @throws NotificationBusinessInvalidException
      * @return bool
      */
-    protected function isBusinessCorrect(\Paypal\Authentication $authentication) {
+    protected function isBusinessCorrect(Authentication $authentication) {
         if ($this->sandbox != $authentication->isSandbox()) {
-            throw new \Paypal\Exceptions\NotificationBusinessInvalidException($this);
+            throw new NotificationBusinessInvalidException($this);
         }
         return true;
     }
 
     /**
      * Check the correct currency was used
-     * 
-     * @param \Paypal\Settings $setting
-     * @throws \Paypal\Exceptions\NotificationCurrencyInvalidException
+     *
+     * @param Settings $settings
      * @return bool
      */
-    protected function isCurrencyCorrect(\Paypal\Settings $settings) {
+    protected function isCurrencyCorrect(Settings $settings) {
         return true;
     }
 }

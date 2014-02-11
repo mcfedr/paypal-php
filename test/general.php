@@ -2,13 +2,13 @@
 require 'common.php';
 
 //Create the authentication
-$auth = new Paypal\Authentication('seller_1305978152_biz@gmail.com', 
+$auth = new mcfedr\Paypal\Authentication('seller_1305978152_biz@gmail.com',
 								'seller_1305978152_biz_api1.gmail.com', 
 								'1305978161', 
 								'ANuWCqPKdl8pa4WYHr9g0kh6hysAAw2yhHObLujRQpilgNH0uanFiO3x',
 								true);
 //Create the paypal object
-$paypal = new Paypal\Paypal($auth);
+$paypal = new mcfedr\Paypal\Paypal($auth);
 
 //the base url
 $me = "http://{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}";
@@ -66,7 +66,7 @@ if($action == 'notify') {
 			}
 		}
 		//create a product
-		$product = new Paypal\Products\CartProduct();
+		$product = new mcfedr\Paypal\Products\CartProduct();
 		$product->id = 1;
 		$product->name = "Book";
 		$product->amount = 10;
@@ -78,7 +78,7 @@ if($action == 'notify') {
 		$product->handling = 1;
 		
 		//and another
-		$product2 = new Paypal\Products\CartProduct();
+		$product2 = new mcfedr\Paypal\Products\CartProduct();
 		$product2->id = 2;
 		$product2->name = "CD";
 		$product2->amount = 10;
@@ -111,18 +111,18 @@ if($action == 'notify') {
 		echo "<button type=\"submit\">Checkout</button>";
 		echo "</form>";
 		
-		$subscription = new Paypal\Products\Subscription();
+		$subscription = new mcfedr\Paypal\Products\Subscription();
 		$subscription->id = 1;
 		$subscription->name = 'Magazine';
 		$subscription->amount = 100;
 		$subscription->duration = 1;
-		$subscription->units = Paypal\Products\Subscription::MONTHS;
+		$subscription->units = mcfedr\Paypal\Products\Subscription::MONTHS;
 		$subscription->generateUsernameAndPassword = true;
 		$subscription->reattempt = true;
 		$subscription->recuring = true;
 		$subscription->trialAmount = 50;
 		$subscription->trialDuration = 2;
-		$subscription->trialUnits = Paypal\Products\Subscription::WEEKS;
+		$subscription->trialUnits = mcfedr\Paypal\Products\Subscription::WEEKS;
 		
 		//so we can see these products
 		echo "<h1>subscribe</h1>";

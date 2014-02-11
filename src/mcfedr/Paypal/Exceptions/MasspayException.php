@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal\Exceptions;
+namespace mcfedr\Paypal\Exceptions;
 
 /**
  * A problem issuing a masspay command

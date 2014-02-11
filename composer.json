@@ -4,17 +4,20 @@
     "description": "Paypal",
     "keywords": ["paypal"],
     "homepage": "http://github.com/mcfedr/paypal-php",
-    "license": "GPL",
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*"
+    },
+    "license": "MIT",
     "authors": [
         {
             "name": "Fred Cox",
-            "email": "mcfedr@gmail.com",
-            "role": "Developer"
+            "email": "mcfedr@gmail.com"
         }
     ],
 	"autoload": {
         "psr-0": {
-            "Paypal": "src"
+            "mcfedr\\Paypal\\": "src/"
         }
     }
 }

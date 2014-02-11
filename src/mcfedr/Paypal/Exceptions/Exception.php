@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal\Exceptions;
+namespace mcfedr\Paypal\Exceptions;
 
 /**
  * The base of all Paypal Exceptions

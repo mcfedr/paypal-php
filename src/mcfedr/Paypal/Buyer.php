@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal;
+namespace mcfedr\Paypal;
 
 /**
  * Describes the buyer of your product, this info is received in notifications

@@ -1,12 +1,14 @@
 <?php
 
-namespace Paypal\Notifications;
+namespace mcfedr\Paypal\Notifications;
+
+use mcfedr\Paypal\Buyer;
 
 abstract class PaymentNotification extends Notification {
 
     /**
      * Info about buyer
-     * @var Paypal\Buyer
+     * @var Buyer
      */
     public $buyer;
 
@@ -25,7 +27,7 @@ abstract class PaymentNotification extends Notification {
     public function __construct($vars) {
         parent::__construct($vars);
 
-        $this->buyer = new \Paypal\Buyer($vars);
+        $this->buyer = new Buyer($vars);
 
         if (isset($vars['mc_currency'])) {
             $this->currency = $vars['mc_currency'];

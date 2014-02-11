@@ -1,6 +1,6 @@
 <?php
 
-namespace Paypal\Notifications;
+namespace mcfedr\Paypal\Notifications;
 
 class CartChangeNotification extends CartNotification {
 

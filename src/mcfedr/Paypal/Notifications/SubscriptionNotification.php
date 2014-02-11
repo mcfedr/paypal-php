@@ -1,6 +1,8 @@
 <?php
 
-namespace Paypal\Notifications;
+namespace mcfedr\Paypal\Notifications;
+
+use mcfedr\Paypal\Products\Subscription;
 
 class SubscriptionNotification extends PaymentNotification {
 
@@ -8,7 +10,7 @@ class SubscriptionNotification extends PaymentNotification {
      * The product purchased in this transaction
      * Can be used to check the right amounts where paid and the cart is what you expected
      * 
-     * @var \Paypal\Products\Subscription
+     * @var Subscription
      */
     public $product;
 
@@ -34,7 +36,7 @@ class SubscriptionNotification extends PaymentNotification {
 
         if ($has) {
             $this->amount = $this->total;
-            $this->product = new \Paypal\Products\Subscription($vars);
+            $this->product = new Subscription($vars);
         }
     }
 

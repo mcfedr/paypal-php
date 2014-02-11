@@ -1,12 +1,15 @@
 <?php
 
-namespace Paypal\Notifications;
+namespace mcfedr\Paypal\Notifications;
+
+use mcfedr\Paypal\Authentication;
+use mcfedr\Paypal\Settings;
 
 class MasspayNotifications extends Notification {
 
     /**
      * Sub notifications, used by masspay
-     * @var array {@link Notification}
+     * @var MasspayNotification[]
      */
     public $notifications;
 
@@ -34,11 +37,11 @@ class MasspayNotifications extends Notification {
     /**
      * Check everything is as expected
      * 
-     * @param \Paypal\Authenticaton $authentication
-     * @param \Paypal\Settings $settings
+     * @param Authentication $authentication
+     * @param Settings $settings
      * @return bool
      */
-    public function isOK(\Paypal\Authenticaton $authentication, \Paypal\Settings $settings) {
+    public function isOK(Authentication $authentication, Settings $settings) {
         if (empty($this->notifications)) {
             return false;
         }

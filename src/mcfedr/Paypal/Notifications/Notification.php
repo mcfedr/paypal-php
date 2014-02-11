@@ -1,6 +1,11 @@
 <?php
 
-namespace Paypal\Notifications;
+namespace mcfedr\Paypal\Notifications;
+
+use mcfedr\Paypal\Authentication;
+use mcfedr\Paypal\Exceptions\NotificationBusinessInvalidException;
+use mcfedr\Paypal\Exceptions\NotificationCurrencyInvalidException;
+use mcfedr\Paypal\Settings;
 
 /**
  * Describes a notification
@@ -82,7 +87,7 @@ abstract class Notification {
     public $transactionId;
 
     /**
-     * The origonal transaction (for refunds)
+     * The original transaction (for refunds)
      * @var string
      */
     public $parentTransactionId;
@@ -161,7 +166,7 @@ abstract class Notification {
 
     /**
      * Time the payment was made
-     * @var DateTime
+     * @var \DateTime
      */
     public $date;
 
@@ -216,40 +221,39 @@ abstract class Notification {
 
     /**
      * Check everything is as expected
-     * 
-     * @param \Paypal\Authenticaton $authentication
-     * @param \Paypal\Settings $settings
-     * @throws \Paypal\Exceptions\NotificationInvalidException
+     *
+     * @param Authentication $authentication
+     * @param Settings $settings
      * @return bool
      */
-    public function isOK(\Paypal\Authentication $authentication, \Paypal\Settings $settings) {
+    public function isOK(Authentication $authentication, Settings $settings) {
         return $this->isBusinessCorrect($authentication) && $this->isCurrencyCorrect($settings);
     }
 
     /**
      * Check that the notification matches the expected business
-     * 
-     * @param \Paypal\Authenticaton $authentication
-     * @throws \Paypal\Exceptions\NotificationBusinessInvalidException
+     *
+     * @param Authentication $authentication
+     * @throws NotificationBusinessInvalidException
      * @return bool
      */
-    protected function isBusinessCorrect(\Paypal\Authentication $authentication) {
+    protected function isBusinessCorrect(Authentication $authentication) {
         if ($this->business != $authentication->getEmail() || $this->sandbox != $authentication->isSandbox()) {
-            throw new \Paypal\Exceptions\NotificationBusinessInvalidException($this);
+            throw new NotificationBusinessInvalidException($this);
         }
         return true;
     }
 
     /**
      * Check the correct currency was used
-     * 
-     * @param \Paypal\Settings $setting
-     * @throws \Paypal\Exceptions\NotificationCurrencyInvalidException
+     *
+     * @param Settings $settings
+     * @throws NotificationCurrencyInvalidException
      * @return bool
      */
-    protected function isCurrencyCorrect(\Paypal\Settings $settings) {
+    protected function isCurrencyCorrect(Settings $settings) {
         if ($this->currency != $settings->currency) {
-            throw new \Paypal\Exceptions\NotificationCurrencyInvalidException($this, $this->currency, $settings->currency);
+            throw new NotificationCurrencyInvalidException($this, $this->currency, $settings->currency);
         }
         return true;
     }
