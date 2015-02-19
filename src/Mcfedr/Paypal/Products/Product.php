@@ -7,7 +7,8 @@ namespace Mcfedr\Paypal\Products;
  * Some vars effect selling
  * Some are set when receiving a notification
  */
-abstract class Product {
+abstract class Product
+{
 
     /**
      * unique id of this product
@@ -41,7 +42,8 @@ abstract class Product {
      * @param array $vars
      * @param string $number use when more than one product eg '1', '2'
      */
-    public function __construct($vars = null, $number = '') {
+    public function __construct($vars = null, $number = '')
+    {
         if (!is_null($vars)) {
             if (isset($vars["item_number$number"])) {
                 $this->id = $vars["item_number$number"];
@@ -51,9 +53,10 @@ abstract class Product {
             }
             if (isset($vars["mc_fee_$number"])) {
                 $this->fee = $vars["mc_fee_$number"];
-            }
-            else if (isset($vars["mc_fee$number"])) {
-                $this->fee = $vars["mc_fee$number"];
+            } else {
+                if (isset($vars["mc_fee$number"])) {
+                    $this->fee = $vars["mc_fee$number"];
+                }
             }
         }
     }
@@ -64,7 +67,8 @@ abstract class Product {
      * @param array $params
      * @param string $suffix
      */
-    public function setParams(&$params, $suffix = '') {
+    public function setParams(&$params, $suffix = '')
+    {
         if (!empty($this->id)) {
             $params["item_number$suffix"] = $this->id;
         }

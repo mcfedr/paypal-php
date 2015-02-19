@@ -10,7 +10,8 @@ use Mcfedr\Paypal\Settings;
 /**
  * Describes a notification
  */
-abstract class Notification {
+abstract class Notification
+{
 
     /**
      * Type of notification
@@ -182,7 +183,8 @@ abstract class Notification {
      */
     public $sandbox;
 
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         if (isset($vars['txn_type'])) {
             $this->transactionType = $vars['txn_type'];
         }
@@ -226,7 +228,8 @@ abstract class Notification {
      * @param Settings $settings
      * @return bool
      */
-    public function isOK(Authentication $authentication, Settings $settings) {
+    public function isOK(Authentication $authentication, Settings $settings)
+    {
         return $this->isBusinessCorrect($authentication) && $this->isCurrencyCorrect($settings);
     }
 
@@ -237,7 +240,8 @@ abstract class Notification {
      * @throws NotificationBusinessInvalidException
      * @return bool
      */
-    protected function isBusinessCorrect(Authentication $authentication) {
+    protected function isBusinessCorrect(Authentication $authentication)
+    {
         if ($this->business != $authentication->getEmail() || $this->sandbox != $authentication->isSandbox()) {
             throw new NotificationBusinessInvalidException($this);
         }
@@ -251,7 +255,8 @@ abstract class Notification {
      * @throws NotificationCurrencyInvalidException
      * @return bool
      */
-    protected function isCurrencyCorrect(Settings $settings) {
+    protected function isCurrencyCorrect(Settings $settings)
+    {
         if ($this->currency != $settings->currency) {
             throw new NotificationCurrencyInvalidException($this, $this->currency, $settings->currency);
         }

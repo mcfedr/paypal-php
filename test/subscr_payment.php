@@ -6,9 +6,8 @@ parse_str($query, $arr);
 $paypal = paypal();
 
 try {
-	$notif = $paypal->handleNotification($arr);
-	print_r($notif);
-}
-catch (Exception $e) {
-	print_r($e);
+    $notif = $paypal->handleNotification($arr);
+    print_r($notif);
+} catch (Exception $e) {
+    print_r($e);
 }

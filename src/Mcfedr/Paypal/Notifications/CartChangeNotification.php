@@ -2,9 +2,11 @@
 
 namespace Mcfedr\Paypal\Notifications;
 
-class CartChangeNotification extends CartNotification {
+class CartChangeNotification extends CartNotification
+{
 
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         parent::__construct($vars);
         $this->type = static::REFUND;
     }

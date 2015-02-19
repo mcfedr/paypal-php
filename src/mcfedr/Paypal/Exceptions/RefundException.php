@@ -5,6 +5,7 @@ namespace Mcfedr\Paypal\Exceptions;
 /**
  * A problem issuing a refund
  */
-class RefundException extends ACKException {
+class RefundException extends ACKException
+{
 
 }

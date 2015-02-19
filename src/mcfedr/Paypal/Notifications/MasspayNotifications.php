@@ -5,7 +5,8 @@ namespace Mcfedr\Paypal\Notifications;
 use Mcfedr\Paypal\Authentication;
 use Mcfedr\Paypal\Settings;
 
-class MasspayNotifications extends Notification {
+class MasspayNotifications extends Notification
+{
 
     /**
      * Sub notifications, used by masspay
@@ -13,7 +14,8 @@ class MasspayNotifications extends Notification {
      */
     public $notifications;
 
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         parent::__construct($vars);
         $this->type = static::MASSPAYS;
 
@@ -41,7 +43,8 @@ class MasspayNotifications extends Notification {
      * @param Settings $settings
      * @return bool
      */
-    public function isOK(Authentication $authentication, Settings $settings) {
+    public function isOK(Authentication $authentication, Settings $settings)
+    {
         if (empty($this->notifications)) {
             return false;
         }

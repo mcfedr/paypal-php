@@ -5,7 +5,8 @@ namespace Mcfedr\Paypal\Exceptions;
 /**
  * Base of invalid notifications
  */
-abstract class NotificationInvalidException extends Exception {
+abstract class NotificationInvalidException extends Exception
+{
 
     /**
      * The notification that caused the exception
@@ -19,7 +20,8 @@ abstract class NotificationInvalidException extends Exception {
      *
      * @return \Mcfedr\Paypal\Notifications\Notification
      */
-    public function getNotification() {
+    public function getNotification()
+    {
         return $this->notification;
     }
 

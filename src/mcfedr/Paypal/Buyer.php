@@ -5,7 +5,8 @@ namespace Mcfedr\Paypal;
 /**
  * Describes the buyer of your product, this info is received in notifications
  */
-class Buyer {
+class Buyer
+{
 
     /**
      * Unique id for this buyer
@@ -107,7 +108,8 @@ class Buyer {
      * Extract buyer info from the vars from notifications
      * @param array $vars
      */
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         if (isset($vars['payer_id'])) {
             $this->id = $vars['payer_id'];
         }
@@ -122,9 +124,10 @@ class Buyer {
 
         if (isset($vars['payer_email'])) {
             $this->email = $vars['payer_email'];
-        }
-        else if (isset($vars['sender_email'])) {
-            $this->email = $vars['sender_email'];
+        } else {
+            if (isset($vars['sender_email'])) {
+                $this->email = $vars['sender_email'];
+            }
         }
 
         if (isset($vars['payer_business_name'])) {
@@ -181,7 +184,8 @@ class Buyer {
      *
      * @param array $params
      */
-    public function setParams(&$params) {
+    public function setParams(&$params)
+    {
         if (!empty($this->email)) {
             $params['email'] = $this->email;
         }

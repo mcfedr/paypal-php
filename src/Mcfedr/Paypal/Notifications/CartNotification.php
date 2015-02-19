@@ -4,7 +4,8 @@ namespace Mcfedr\Paypal\Notifications;
 
 use Mcfedr\Paypal\Products\CartProduct;
 
-class CartNotification extends PaymentNotification {
+class CartNotification extends PaymentNotification
+{
 
     /**
      * Amount paid for shipping
@@ -25,7 +26,8 @@ class CartNotification extends PaymentNotification {
      */
     public $products;
 
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         parent::__construct($vars);
         $this->type = static::CART;
 
@@ -35,9 +37,10 @@ class CartNotification extends PaymentNotification {
 
         if (isset($vars['mc_shipping'])) {
             $this->shipping = $vars['mc_shipping'];
-        }
-        else if (isset($vars['shipping'])) {
-            $this->shipping = $vars['shipping'];
+        } else {
+            if (isset($vars['shipping'])) {
+                $this->shipping = $vars['shipping'];
+            }
         }
 
         if (isset($vars['mc_gross'])) {

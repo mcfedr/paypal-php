@@ -4,7 +4,8 @@ namespace Mcfedr\Paypal\Notifications;
 
 use Mcfedr\Paypal\Products\Subscription;
 
-class SubscriptionNotification extends PaymentNotification {
+class SubscriptionNotification extends PaymentNotification
+{
 
     /**
      * The product purchased in this transaction
@@ -14,20 +15,21 @@ class SubscriptionNotification extends PaymentNotification {
      */
     public $product;
 
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         parent::__construct($vars);
         $this->type = static::SUBSCRIPTION;
 
         if (isset($vars['mc_gross'])) {
             $this->total = $vars['mc_gross'];
             $has = true;
-        }
-        else if (isset($vars['mc_amount3'])) {
-            $this->total = $vars['mc_amount3'];
-            $has = true;
-        }
-        else {
-            $has = false;
+        } else {
+            if (isset($vars['mc_amount3'])) {
+                $this->total = $vars['mc_amount3'];
+                $has = true;
+            } else {
+                $has = false;
+            }
         }
 
         if (isset($vars['subscr_date'])) {

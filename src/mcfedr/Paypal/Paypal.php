@@ -29,7 +29,8 @@ use Mcfedr\Paypal\Exceptions\UnsupportedRefundException;
 /**
  * This class is used for generation of buttons and handling of paypal responses
  */
-class Paypal {
+class Paypal
+{
 
     /**
      * Authentication to use
@@ -49,7 +50,8 @@ class Paypal {
      * @param Authentication $authentication
      * @param Settings $settings
      */
-    public function __construct(Authentication $authentication, Settings $settings = null) {
+    public function __construct(Authentication $authentication, Settings $settings = null)
+    {
         $this->authentication = $authentication;
         if ($settings == null) {
             $settings = new Settings();
@@ -71,7 +73,16 @@ class Paypal {
      * @param string $label Label for the button
      * @return string html form with a button
      */
-    public function getButton($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null, Buyer $buyer = null, $label = "Checkout") {
+    public function getButton(
+        $products,
+        $paidURL,
+        $cancelURL,
+        $notifyURL = null,
+        $invoiceId = null,
+        $custom = null,
+        Buyer $buyer = null,
+        $label = "Checkout"
+    ) {
         $action = $this->getButtonAction();
         $params = $this->getButtonParams($products, $paidURL, $cancelURL, $notifyURL, $invoiceId, $custom, $buyer);
         $ret = "<form action=\"$action\" method=\"post\">";
@@ -98,29 +109,36 @@ class Paypal {
      * @param Buyer $buyer Info about the buyer to autofill in
      * @return array of string
      */
-    public function getButtonParams($products, $paidURL, $cancelURL, $notifyURL = null, $invoiceId = null, $custom = null, Buyer $buyer = null) {
+    public function getButtonParams(
+        $products,
+        $paidURL,
+        $cancelURL,
+        $notifyURL = null,
+        $invoiceId = null,
+        $custom = null,
+        Buyer $buyer = null
+    ) {
         $params = array();
         if ($products instanceof Products\Subscription) {
             $params['cmd'] = '_xclick-subscriptions';
             $products->setParams($params);
-        }
-        else if (!is_array($products) || count($products) == 1) {
-            if (!is_array($products)) {
-                $product = $products;
-            }
-            else {
-                $product = $products[0];
-            }
-            $params['cmd'] = '_xclick';
-            $product->setParams($params);
-        }
-        else {
-            $params['cmd'] = '_cart';
-            $params['upload'] = 1;
-            $i = 1;
-            foreach ($products as $product) {
-                $product->setParams($params, "_$i");
-                $i++;
+        } else {
+            if (!is_array($products) || count($products) == 1) {
+                if (!is_array($products)) {
+                    $product = $products;
+                } else {
+                    $product = $products[0];
+                }
+                $params['cmd'] = '_xclick';
+                $product->setParams($params);
+            } else {
+                $params['cmd'] = '_cart';
+                $params['upload'] = 1;
+                $i = 1;
+                foreach ($products as $product) {
+                    $product->setParams($params, "_$i");
+                    $i++;
+                }
             }
         }
 
@@ -152,11 +170,11 @@ class Paypal {
      *
      * @return string
      */
-    public function getButtonAction() {
+    public function getButtonAction()
+    {
         if ($this->authentication->isSandbox()) {
             return 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-        }
-        else {
+        } else {
             return 'https://www.paypal.com/cgi-bin/webscr';
         }
     }
@@ -164,14 +182,14 @@ class Paypal {
     /**
      * Call this function on your instant notification url (IN)
      * And success url to use payment data transfer (PDT)
-
      * @throws Exceptions\CurlException
      * @throws Exceptions\NotificationVerificationException
      * @throws Exceptions\NotificationInvalidException
      * @param array $vars variables to use, normally $_POST
      * @return Notifications\Notification
      */
-    public function handleNotification($vars = null) {
+    public function handleNotification($vars = null)
+    {
         if (is_null($vars)) {
             $vars = $_REQUEST;
         }
@@ -195,22 +213,24 @@ class Paypal {
                     $handled = new Notifications\SubscriptionNotification($vars);
                     break;
             }
-        }
-        else if (isset($vars['payment_status'])) {
-            switch ($vars['payment_status']) {
-                case 'Refunded':
-                case 'Reversed':
-                case 'Canceled_Reversal':
-                    $handled = new Notifications\CartChangeNotification($vars);
-                    break;
-            }
-        }
-        else if (isset($vars['transaction_type'])) {
-            switch($vars['transaction_type']) {
-                case Notifications\Notification::TXT_ADAPTIVE_CREATE:
-                case Notifications\Notification::TXT_ADAPTIVE_ADJUSTMENT:
-                    $handled = new Notifications\AdaptivePaymentNotification($vars);
-                    break;
+        } else {
+            if (isset($vars['payment_status'])) {
+                switch ($vars['payment_status']) {
+                    case 'Refunded':
+                    case 'Reversed':
+                    case 'Canceled_Reversal':
+                        $handled = new Notifications\CartChangeNotification($vars);
+                        break;
+                }
+            } else {
+                if (isset($vars['transaction_type'])) {
+                    switch ($vars['transaction_type']) {
+                        case Notifications\Notification::TXT_ADAPTIVE_CREATE:
+                        case Notifications\Notification::TXT_ADAPTIVE_ADJUSTMENT:
+                            $handled = new Notifications\AdaptivePaymentNotification($vars);
+                            break;
+                    }
+                }
             }
         }
 
@@ -227,11 +247,12 @@ class Paypal {
 
         if ($this->settings->logNotifications === true) {
             error_log('paypal notification ' . http_build_query($vars));
-        }
-        else if ($this->settings->logNotifications) {
-            $this->settings->logNotifications->info('Paypal Notification', array(
-                'vars' => $vars
-            ));
+        } else {
+            if ($this->settings->logNotifications) {
+                $this->settings->logNotifications->info('Paypal Notification', array(
+                    'vars' => $vars
+                ));
+            }
         }
         return $handled;
     }
@@ -251,7 +272,8 @@ class Paypal {
      * @param string $subject subject for email
      * @return bool whether succesful or not
      */
-    public function sendPayment($email, $amount, $id = '', $note = '', $subject = null) {
+    public function sendPayment($email, $amount, $id = '', $note = '', $subject = null)
+    {
         $params = array();
         $params['RECEIVERTYPE'] = 'EmailAddress';
         $params['EMAILSUBJECT'] = substr($subject, 0, 255);
@@ -277,27 +299,23 @@ class Paypal {
                 $params["L_EMAIL$i"] = $email[$i];
                 if ($amountArray) {
                     $params["L_AMT$i"] = $amount[$i];
-                }
-                else {
+                } else {
                     $params["L_AMT$i"] = $amount;
                 }
 
                 if ($idArray) {
                     $params["L_UNIQUEID$i"] = substr($id[$i], 0, 30);
-                }
-                else {
+                } else {
                     $params["L_UNIQUEID$i"] = substr($id, 0, 30);
                 }
 
                 if ($noteArray) {
                     $params["L_NOTE$i"] = substr($note[$i], 0, 4000);
-                }
-                else {
+                } else {
                     $params["L_NOTE$i"] = substr($note, 0, 4000);
                 }
             }
-        }
-        else {
+        } else {
             $params['L_EMAIL0'] = $email;
             $params['L_AMT0'] = $amount;
             $params['L_UNIQUEID0'] = substr($id, 0, 30);
@@ -308,12 +326,10 @@ class Paypal {
         if ($response !== false) {
             if ($response['ACK'] == 'Success') {
                 return true;
-            }
-            else {
+            } else {
                 throw new Exceptions\MasspayException($response);
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -329,11 +345,12 @@ class Paypal {
      * @throws Exceptions\UnsupportedRefundException
      * @return bool successful
      */
-    public function refundPayment($transactionId, $invoiceId = null, $type = 'Full') {
+    public function refundPayment($transactionId, $invoiceId = null, $type = 'Full')
+    {
         $params = array();
         $params['TRANSACTIONID'] = $transactionId;
         $params['INVOICEID'] = $invoiceId;
-        if($type != 'Full') {
+        if ($type != 'Full') {
             throw new UnsupportedRefundException($type);
         }
         $params['REFUNDTYPE'] = $type;
@@ -341,12 +358,10 @@ class Paypal {
         if ($response !== false) {
             if ($response['ACK'] == 'Success') {
                 return true;
-            }
-            else {
+            } else {
                 throw new Exceptions\RefundException($response);
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -359,12 +374,12 @@ class Paypal {
      * @param array $params
      * @return array|bool the response vars as an assoc array or false on error
      */
-    private function callPaypalNVP($method, $params) {
+    private function callPaypalNVP($method, $params)
+    {
         $headerParams = array();
         if ($this->authentication->isSandbox()) {
             $url = 'https://api-3t.sandbox.paypal.com/nvp';
-        }
-        else {
+        } else {
             $url = 'https://api-3t.paypal.com/nvp';
         }
         $headerParams['USER'] = $this->authentication->getUsername();
@@ -392,11 +407,11 @@ class Paypal {
      * @throws Exceptions\NotificationVerificationException
      * @return bool
      */
-    private function verifyNotification($notification, $vars) {
+    private function verifyNotification($notification, $vars)
+    {
         if ($this->authentication->isSandbox()) {
             $url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-        }
-        else {
+        } else {
             $url = 'https://www.paypal.com/cgi-bin/webscr';
         }
         $data = http_build_query(array_merge(array('cmd' => '_notify-validate'), $vars));
@@ -419,14 +434,15 @@ class Paypal {
      * @param string $data
      * @return string|bool returns false on error
      */
-    private function makeRequest($url, $data) {
+    private function makeRequest($url, $data)
+    {
         //setting the curl parameters.
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         //curl_setopt($ch, CURLOPT_VERBOSE, 1);
         //turning off the server and peer verification(TrustManager Concept).
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -439,8 +455,7 @@ class Paypal {
 
         if (curl_errno($ch)) {
             throw new Exceptions\CurlException($ch, $url, $data);
-        }
-        else {
+        } else {
             //closing the curl
             curl_close($ch);
         }

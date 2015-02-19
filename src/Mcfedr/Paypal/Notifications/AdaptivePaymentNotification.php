@@ -6,7 +6,8 @@ use Mcfedr\Paypal\Authentication;
 use Mcfedr\Paypal\Exceptions\NotificationBusinessInvalidException;
 use Mcfedr\Paypal\Settings;
 
-class AdaptivePaymentNotification extends PaymentNotification {
+class AdaptivePaymentNotification extends PaymentNotification
+{
 
     /**
      * Status of Payment
@@ -80,7 +81,8 @@ class AdaptivePaymentNotification extends PaymentNotification {
      */
     public $trackingId;
 
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         parent::__construct($vars);
         $this->type = static::ADAPTIVE;
 
@@ -130,7 +132,8 @@ class AdaptivePaymentNotification extends PaymentNotification {
      * @throws NotificationBusinessInvalidException
      * @return bool
      */
-    protected function isBusinessCorrect(Authentication $authentication) {
+    protected function isBusinessCorrect(Authentication $authentication)
+    {
         if ($this->sandbox != $authentication->isSandbox()) {
             throw new NotificationBusinessInvalidException($this);
         }
@@ -143,7 +146,8 @@ class AdaptivePaymentNotification extends PaymentNotification {
      * @param Settings $settings
      * @return bool
      */
-    protected function isCurrencyCorrect(Settings $settings) {
+    protected function isCurrencyCorrect(Settings $settings)
+    {
         return true;
     }
 }

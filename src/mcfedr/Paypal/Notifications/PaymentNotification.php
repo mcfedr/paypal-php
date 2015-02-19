@@ -4,7 +4,8 @@ namespace Mcfedr\Paypal\Notifications;
 
 use Mcfedr\Paypal\Buyer;
 
-abstract class PaymentNotification extends Notification {
+abstract class PaymentNotification extends Notification
+{
 
     /**
      * Info about buyer
@@ -24,7 +25,8 @@ abstract class PaymentNotification extends Notification {
      */
     public $pendingReason;
 
-    public function __construct($vars) {
+    public function __construct($vars)
+    {
         parent::__construct($vars);
 
         $this->buyer = new Buyer($vars);

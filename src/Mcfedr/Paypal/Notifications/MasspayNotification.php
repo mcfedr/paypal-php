@@ -2,9 +2,11 @@
 
 namespace Mcfedr\Paypal\Notifications;
 
-class MasspayNotification extends Notification {
+class MasspayNotification extends Notification
+{
 
-    public function __construct($vars, $i) {
+    public function __construct($vars, $i)
+    {
         parent::__construct($vars);
         $this->type = static::MASSPAY;
 

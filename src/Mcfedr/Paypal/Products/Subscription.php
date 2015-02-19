@@ -5,7 +5,8 @@ namespace Mcfedr\Paypal\Products;
 /**
  * Describes a recurring product
  */
-class Subscription extends Product {
+class Subscription extends Product
+{
 
     const DAYS = 'D';
     const WEEKS = 'W';
@@ -110,7 +111,8 @@ class Subscription extends Product {
      *
      * @param array $vars
      */
-    public function __construct($vars = null) {
+    public function __construct($vars = null)
+    {
         parent::__construct($vars);
 
         if (!is_null($vars)) {
@@ -120,9 +122,10 @@ class Subscription extends Product {
 
             if (isset($vars["mc_gross"])) {
                 $this->amount = $vars["mc_gross"];
-            }
-            else if (isset($vars['mc_amount3'])) {
-                $this->amount = $vars["mc_amount3"];
+            } else {
+                if (isset($vars['mc_amount3'])) {
+                    $this->amount = $vars["mc_amount3"];
+                }
             }
             if (isset($vars['period3'])) {
                 $p = explode(' ', $vars['period3']);
@@ -141,8 +144,7 @@ class Subscription extends Product {
 
             if (isset($vars['reattempt'])) {
                 $this->reattempt = true;
-            }
-            else {
+            } else {
                 $this->reattempt = false;
             }
             if (isset($vars['recur_times'])) {
@@ -150,8 +152,7 @@ class Subscription extends Product {
             }
             if (isset($vars['recurring'])) {
                 $this->recurring = true;
-            }
-            else {
+            } else {
                 $this->recurring = false;
             }
 
@@ -169,7 +170,8 @@ class Subscription extends Product {
      * @param array $params
      * @param string $suffix
      */
-    public function setParams(&$params, $suffix = '') {
+    public function setParams(&$params, $suffix = '')
+    {
         parent::setParams($params);
 
         $params['a3'] = $this->amount;
@@ -180,14 +182,12 @@ class Subscription extends Product {
             $params['a1'] = $this->trialAmount;
             if (!empty($this->trialDuration)) {
                 $params['p1'] = $this->trialDuration;
-            }
-            else {
+            } else {
                 $params['p1'] = $this->duration;
             }
             if (!empty($this->trialUnits)) {
                 $params['t1'] = $this->trialUnits;
-            }
-            else {
+            } else {
                 $params['t1'] = $this->units;
             }
         }
@@ -205,9 +205,10 @@ class Subscription extends Product {
 
         if ($this->allowNew && $this->allowModify) {
             $params['modify'] = 1;
-        }
-        else if ($this->allowModify) {
-            $params['modify'] = 2;
+        } else {
+            if ($this->allowModify) {
+                $params['modify'] = 2;
+            }
         }
 
         if ($this->generateUsernameAndPassword) {

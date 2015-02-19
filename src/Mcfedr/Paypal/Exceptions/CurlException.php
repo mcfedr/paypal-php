@@ -5,7 +5,8 @@ namespace Mcfedr\Paypal\Exceptions;
 /**
  * A curl problem
  */
-class CurlException extends Exception {
+class CurlException extends Exception
+{
 
     private $url;
     private $data;
@@ -16,22 +17,26 @@ class CurlException extends Exception {
      * @param string $url
      * @param string $data
      */
-    public function __construct($ch, $url, $data) {
+    public function __construct($ch, $url, $data)
+    {
         $this->url = $url;
         $this->data = $data;
         $this->curlMessage = curl_error($ch);
         parent::__construct("Error posting to paypal, " . curl_error($ch), curl_errno($ch));
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         return $this->url;
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->data;
     }
 
-    public function getCurlMessage() {
+    public function getCurlMessage()
+    {
         return $this->curlMessage;
     }
 
