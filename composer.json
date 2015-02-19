@@ -5,7 +5,7 @@
     "keywords": ["paypal"],
     "homepage": "http://github.com/mcfedr/paypal-php",
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.4.0",
         "ext-curl": "*"
     },
     "license": "MIT",

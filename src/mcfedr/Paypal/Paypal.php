@@ -25,6 +25,7 @@
 namespace Mcfedr\Paypal;
 
 use Mcfedr\Paypal\Exceptions\UnsupportedRefundException;
+use Mcfedr\Paypal\Products\Product;
 
 /**
  * This class is used for generation of buttons and handling of paypal responses
@@ -118,7 +119,7 @@ class Paypal
         $custom = null,
         Buyer $buyer = null
     ) {
-        $params = array();
+        $params = [];
         if ($products instanceof Products\Subscription) {
             $params['cmd'] = '_xclick-subscriptions';
             $products->setParams($params);
@@ -135,6 +136,7 @@ class Paypal
                 $params['cmd'] = '_cart';
                 $params['upload'] = 1;
                 $i = 1;
+                /** @var Product $product */
                 foreach ($products as $product) {
                     $product->setParams($params, "_$i");
                     $i++;
@@ -249,9 +251,9 @@ class Paypal
             error_log('paypal notification ' . http_build_query($vars));
         } else {
             if ($this->settings->logNotifications) {
-                $this->settings->logNotifications->info('Paypal Notification', array(
+                $this->settings->logNotifications->info('Paypal Notification', [
                     'vars' => $vars
-                ));
+                ]);
             }
         }
         return $handled;
@@ -274,7 +276,7 @@ class Paypal
      */
     public function sendPayment($email, $amount, $id = '', $note = '', $subject = null)
     {
-        $params = array();
+        $params = [];
         $params['RECEIVERTYPE'] = 'EmailAddress';
         $params['EMAILSUBJECT'] = substr($subject, 0, 255);
         if (is_array($email)) {
@@ -347,7 +349,7 @@ class Paypal
      */
     public function refundPayment($transactionId, $invoiceId = null, $type = 'Full')
     {
-        $params = array();
+        $params = [];
         $params['TRANSACTIONID'] = $transactionId;
         $params['INVOICEID'] = $invoiceId;
         if ($type != 'Full') {
@@ -376,7 +378,7 @@ class Paypal
      */
     private function callPaypalNVP($method, $params)
     {
-        $headerParams = array();
+        $headerParams = [];
         if ($this->authentication->isSandbox()) {
             $url = 'https://api-3t.sandbox.paypal.com/nvp';
         } else {
@@ -387,7 +389,7 @@ class Paypal
         $headerParams['SIGNATURE'] = $this->authentication->getSignature();
         $headerParams['VERSION'] = '71.0';
 
-        $data = http_build_query(array_merge(array('METHOD' => $method), $headerParams, $params));
+        $data = http_build_query(array_merge(['METHOD' => $method], $headerParams, $params));
 
         $response = $this->makeRequest($url, $data);
         if ($response === false) {
@@ -414,7 +416,7 @@ class Paypal
         } else {
             $url = 'https://www.paypal.com/cgi-bin/webscr';
         }
-        $data = http_build_query(array_merge(array('cmd' => '_notify-validate'), $vars));
+        $data = http_build_query(array_merge(['cmd' => '_notify-validate'], $vars));
         $response = $this->makeRequest($url, $data);
         if ($response === false) {
             return false;

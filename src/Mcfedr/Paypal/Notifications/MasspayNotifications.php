@@ -19,7 +19,7 @@ class MasspayNotifications extends Notification
         parent::__construct($vars);
         $this->type = static::MASSPAYS;
 
-        $this->notifications = array();
+        $this->notifications = [];
         for ($i = 1; isset($vars["status_$i"]); $i++) {
             $n = new MasspayNotification($vars, $i);
             $this->notifications[] = $n;

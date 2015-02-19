@@ -48,7 +48,7 @@ class CartNotification extends PaymentNotification
             $this->amount = $this->total - (isset($this->handling) ? $this->handling : 0) - (isset($this->shipping) ? $this->shipping : 0);
         }
 
-        $this->products = array();
+        $this->products = [];
         for ($i = 1; isset($vars["item_name$i"]); $i++) {
             $this->products[] = new CartProduct($vars, $i);
         }
