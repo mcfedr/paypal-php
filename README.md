@@ -36,11 +36,7 @@ Alternatively just run [`apigen`](http://apigen.org/) once you have cloned the r
 
 [Composer](http://getcomposer.org/) is the best way to get started with an new project. This package is not far away… [Paypal at Packagist](https://packagist.org/packages/mcfedr/paypal)
 
-	{
-	    "require": {
-	        "mcfedr/paypal": "~3.0.0"
-	    }
-	}
+	composer require mcfedr/paypal
 
 ### Standard
 

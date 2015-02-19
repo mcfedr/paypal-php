@@ -1,6 +1,6 @@
 {
     "name": "mcfedr/paypal",
-	"type": "library",
+    "type": "library",
     "description": "Paypal",
     "keywords": ["paypal"],
     "homepage": "http://github.com/mcfedr/paypal-php",
@@ -15,9 +15,17 @@
             "email": "mcfedr@gmail.com"
         }
     ],
-	"autoload": {
+    "autoload": {
         "psr-0": {
             "Mcfedr\\Paypal\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "Mcfedr\\Paypal\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.5"
     }
 }
