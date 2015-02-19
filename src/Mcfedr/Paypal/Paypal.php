@@ -2,6 +2,8 @@
 
 namespace Mcfedr\Paypal;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Mcfedr\Paypal\Exceptions\UnsupportedRefundException;
 use Mcfedr\Paypal\Products\Product;
 
@@ -24,6 +26,11 @@ class Paypal
     private $settings;
 
     /**
+     * @var Client
+     */
+    private $client;
+
+    /**
      * Create a new paypal object
      *
      * @param Authentication $authentication
@@ -36,6 +43,8 @@ class Paypal
             $settings = new Settings();
         }
         $this->settings = $settings;
+
+        $this->client = new Client();
     }
 
     /**
@@ -349,32 +358,30 @@ class Paypal
     /**
      * Make a paypal NVP API call
      *
-     * @throws Exceptions\CurlException
+     * @throws RequestException
      * @param string $method
      * @param array $params
      * @return array|bool the response vars as an assoc array or false on error
      */
     private function callPaypalNVP($method, $params)
     {
-        $headerParams = [];
         if ($this->authentication->isSandbox()) {
             $url = 'https://api-3t.sandbox.paypal.com/nvp';
         } else {
             $url = 'https://api-3t.paypal.com/nvp';
         }
+
+        $headerParams = [];
         $headerParams['USER'] = $this->authentication->getUsername();
         $headerParams['PWD'] = $this->authentication->getPassword();
         $headerParams['SIGNATURE'] = $this->authentication->getSignature();
         $headerParams['VERSION'] = '71.0';
 
-        $data = http_build_query(array_merge(['METHOD' => $method], $headerParams, $params));
+        $response = $this->client->post($url, [
+            'body' => array_merge(['METHOD' => $method], $headerParams, $params)
+        ]);
 
-        $response = $this->makeRequest($url, $data);
-        if ($response === false) {
-            return false;
-        }
-
-        parse_str($response, $nvpResArray);
+        parse_str(((string)$response->getBody()), $nvpResArray);
         return $nvpResArray;
     }
 
@@ -385,6 +392,7 @@ class Paypal
      * @param \Mcfedr\Paypal\Notifications\Notification $notification
      * @param array $vars
      * @throws Exceptions\NotificationVerificationException
+     * @throws RequestException
      * @return bool
      */
     private function verifyNotification($notification, $vars)
@@ -394,52 +402,15 @@ class Paypal
         } else {
             $url = 'https://www.paypal.com/cgi-bin/webscr';
         }
-        $data = http_build_query(array_merge(['cmd' => '_notify-validate'], $vars));
-        $response = $this->makeRequest($url, $data);
-        if ($response === false) {
-            return false;
-        }
-        $verified = $response == 'VERIFIED';
+
+        $response = $this->client->post($url, [
+            'body' => array_merge(['cmd' => '_notify-validate'], $vars)
+        ]);
+
+        $verified = ((string)$response->getBody()) == 'VERIFIED';
         if (!$verified) {
             throw new Exceptions\NotificationVerificationException($response, $notification);
         }
         return $verified;
     }
-
-    /**
-     * Makes a request using curl, basically sets some curl options
-     *
-     * @throws Exceptions\CurlException
-     * @param string $url
-     * @param string $data
-     * @return string|bool returns false on error
-     */
-    private function makeRequest($url, $data)
-    {
-        //setting the curl parameters.
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        //curl_setopt($ch, CURLOPT_VERBOSE, 1);
-        //turning off the server and peer verification(TrustManager Concept).
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-
-        //setting the nvpreq as POST FIELD to curl
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
-        //getting response from server
-        $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            throw new Exceptions\CurlException($ch, $url, $data);
-        } else {
-            //closing the curl
-            curl_close($ch);
-        }
-        return $response;
-    }
-
 }
