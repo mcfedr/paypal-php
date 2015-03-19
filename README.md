@@ -5,6 +5,7 @@ A simple SDK for dealing with the Paypal API from PHP.
 [![Latest Stable Version](https://poser.pugx.org/mcfedr/paypal/v/stable.png)](https://packagist.org/packages/mcfedr/paypal)
 [![License](https://poser.pugx.org/mcfedr/paypal/license.png)](https://packagist.org/packages/mcfedr/paypal)
 [![Build Status](https://travis-ci.org/mcfedr/paypal-php.svg?branch=master)](https://travis-ci.org/mcfedr/paypal-php)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/ebc0b61e-35c8-4d26-b28f-a72f524b87de/mini.png)](https://insight.sensiolabs.com/projects/ebc0b61e-35c8-4d26-b28f-a72f524b87de)
 
 ## Features
 
